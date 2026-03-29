@@ -1,179 +1,263 @@
-# 🔭 Chrome Secrets — Workshop DIY
+# 🔭 Browser Secrets — Workshop DIY
 
-> **Explore les pages cachées de ton navigateur préféré !**
-> Un atelier interactif pour les curieux de 10 ans et plus 🚀
-
----
-
-## 🤔 C'est quoi Chrome Secrets ?
-
-Tu utilises Google Chrome tous les jours pour aller sur YouTube, jouer ou faire tes recherches.
-Mais savais-tu que Chrome cache des **dizaines de pages secrètes** auxquelles presque personne n'accède ?
-
-Ces pages se trouvent à des adresses spéciales qui commencent par **`chrome://`** — et elles te montrent
-les coulisses de ton navigateur : comment il dessine les images, comment il retrouve les sites web,
-comment il te protège des virus, et même un jeu caché !
-
-**Chrome Secrets** est une application web de Workshop-DIY qui te guide à travers **47 de ces pages secrètes**,
-avec des explications simples, des astuces, et des anecdotes surprenantes. 🤯
+> **Explorez ensemble les pages cachées de Chrome et Edge !**
+> Un atelier parent-enfant à partir de 8 ans 🚀
 
 ---
 
-## 🚀 Comment lancer l'application ?
+## 👨‍👩‍👧 Pourquoi faire cet atelier ensemble ?
 
-### Option 1 — Fichier local (recommandé pour l'atelier)
+Ce n'est pas un atelier où l'enfant regarde l'adulte taper sur un clavier.
+C'est l'inverse : **l'enfant explore, l'adulte découvre avec lui.**
 
-1. Télécharge le fichier **`workshop-chrome-secrets.html`**
-2. Ouvre-le dans **Google Chrome** (double-clic, ou glisse-dépose dans Chrome)
-3. C'est tout ! L'application fonctionne hors connexion, aucune installation requise.
+Chrome et Edge — les navigateurs que vous utilisez tous les jours — cachent des dizaines
+de pages secrètes que même la plupart des adultes ne connaissent pas.
 
-### Option 2 — En ligne
+En les explorant ensemble, vous allez naturellement parler de :
+- 🌐 Comment fonctionne vraiment internet ?
+- 🛡️ Comment mon ordi se protège des virus ?
+- 🧠 Pourquoi le navigateur ralentit avec trop d'onglets ?
+- 📡 Qui peut voir ce que je fais en ligne ?
 
-Ouvre directement l'application via le lien Workshop-DIY :
+**Pas besoin d'être informaticien. La curiosité suffit.** 😊
+
+---
+
+## 🤔 C'est quoi `chrome://` et `edge://` ?
+
+Quand tu tapes `youtube.com`, tu accèdes à un site sur internet.
+Mais quand tu tapes `chrome://quelquechose` ou `edge://quelquechose`,
+tu accèdes à une **page interne** du navigateur lui-même —
+comme ouvrir le capot d'une voiture pour voir le moteur.
+
+Ces pages existent depuis toujours mais Google et Microsoft n'en parlent jamais.
+Elles servent aux ingénieurs pour tester et déboguer les navigateurs.
+Et elles sont fascinantes à explorer !
+
+| Navigateur | Préfixe | Exemple |
+|-----------|---------|---------|
+| 🟢 **Google Chrome** | `chrome://` | `chrome://dino` |
+| 🔵 **Microsoft Edge** | `edge://` | `edge://surf` |
+
+---
+
+## 🚀 Lancer l'application
+
+### En local (sans internet)
+1. Télécharge **`workshop-browser-secrets.html`**
+2. Ouvre-le dans **Google Chrome** ou **Microsoft Edge**
+3. Glisse-dépose le fichier dans le navigateur
+4. C'est tout — le fichier est autonome, tout est dedans ! 🎉
+
+### En ligne
 ```
 https://abourdim.github.io/tools/
 ```
 
----
-
-## 📋 Comment utiliser un secret ?
-
-Les adresses `chrome://` sont des adresses **internes** à Chrome.
-Elles ne fonctionnent **pas** comme les sites web normaux — tu ne peux pas cliquer sur un lien
-pour les ouvrir depuis une autre page web. Il faut les taper (ou coller) dans la barre d'adresse.
-
-### Étapes simples :
-
-```
-┌─────────────────────────────────────────────────────────┐
-│  1. Clique le bouton  📋  à côté d'un secret            │
-│     → L'URL est copiée dans ton presse-papier            │
-│     → Chrome essaie aussi d'ouvrir l'onglet              │
-│                                                          │
-│  2. Si l'onglet ne s'ouvre pas automatiquement :         │
-│     → Appuie sur  Ctrl + L  (sélectionne la barre)       │
-│     → Appuie sur  Ctrl + V  (colle l'URL)                │
-│     → Appuie sur  Entrée                                 │
-└─────────────────────────────────────────────────────────┘
-```
-
-> 💡 **Pourquoi ça ne s'ouvre pas tout seul ?**
-> C'est une règle de sécurité de Google : aucun site web ne peut forcer Chrome à ouvrir
-> une page `chrome://`. C'est pour te protéger !
+> ⚠️ **Chrome uniquement pour les adresses chrome://, Edge pour edge://**
+> Pas Firefox, pas Safari — ces adresses sont propres à chaque navigateur.
 
 ---
 
-## 🎮 Les 47 Secrets — Liste Complète
+## 🟢🔵 Choisir son navigateur
 
-### 🎮 Fun & Jeux *(4 secrets)*
+En haut de l'application, deux onglets permettent de basculer :
+
+```
+┌─────────────────────────────────────────────────────┐
+│   🟢 Chrome (46)        🔵 Edge (50)                │
+└─────────────────────────────────────────────────────┘
+```
+
+- **🟢 Chrome** — affiche toutes les URLs `chrome://...` en vert
+- **🔵 Edge** — affiche toutes les URLs `edge://...` en bleu, plus les **exclusifs Edge**
+- Un clic bascule tout instantanément — même catégorie, mêmes filtres
+
+> 💡 **La plupart des secrets sont identiques !** Chrome et Edge sont tous les deux
+> basés sur Chromium. Seules les URLs changent (`chrome://` → `edge://`).
+> Edge a en plus 4 exclusifs Microsoft.
+
+---
+
+## 📋 Comment utiliser un secret
+
+Les adresses `chrome://` et `edge://` **ne peuvent pas** s'ouvrir automatiquement
+depuis une page web — règle de sécurité de Google et Microsoft.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│  1.  Clique 📋 sur le secret de ton choix                   │
+│      → l'URL est copiée dans ton presse-papier              │
+│                                                             │
+│  2.  Dans Chrome ou Edge, clique la barre d'adresse  Ctrl+L │
+│                                                             │
+│  3.  Colle l'URL                                   Ctrl+V   │
+│                                                             │
+│  4.  Appuie sur Entrée                             Entrée   │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🎮 Les Secrets — Liste Complète
+
+### 🎮 Fun & Jeux *(4 secrets — commencez par ici !)*
+
+| Secret | 🟢 Chrome | 🔵 Edge | Niveau |
+|--------|-----------|---------|--------|
+| 🦕 Jeu caché | `chrome://dino` | `edge://surf` 🏄 | ⭐ Facile |
+| 🗺️ Toutes les adresses | `chrome://chrome-urls` | `edge://edge-urls` | ⭐ Facile |
+| 🌟 Les héros (crédits) | `chrome://credits` | `edge://credits` | ⭐ Facile |
+| 🆕 Nouveautés | `chrome://whats-new` | `edge://whats-new` | ⭐ Facile |
+
+> 🦕 Le dino Chrome s'appelle **"Project Bolan"** en interne.
+> Le surf Edge est bien plus élaboré — modes, costumes, boss ! 🏄
+
+---
+
+### 🌐 À Propos du Navigateur *(5 secrets)*
+
+| Secret | 🟢 Chrome | 🔵 Edge | Niveau |
+|--------|-----------|---------|--------|
+| 🪪 Carte d'identité | `chrome://version` | `edge://version` | ⭐ Facile |
+| 📋 Fichier de config | `chrome://local-state` | `edge://local-state` | 🤩 Wow ! |
+| 🧩 Composants internes | `chrome://components` | `edge://components` | 🔬 Moyen |
+| 📊 Informations système | `chrome://system` | `edge://system` | 🔬 Moyen |
+| 📜 Conditions d'utilisation | `chrome://terms` | `edge://terms` | ⭐ Facile |
+
+---
+
+### 🔵 Exclusifs Edge *(4 secrets — uniquement dans Edge !)*
 
 | Secret | Adresse | Niveau |
 |--------|---------|--------|
-| 🦕 Jeu du Dinosaure | `chrome://dino` | ⭐ Facile |
-| 🗺️ Toutes les Adresses | `chrome://chrome-urls` | ⭐ Facile |
-| 🌟 Les Héros (Crédits) | `chrome://credits` | ⭐ Facile |
-| 🆕 Nouveautés Chrome | `chrome://whats-new` | ⭐ Facile |
+| 💰 Microsoft Rewards | `edge://rewards` | ⭐ Facile |
+| 🛍️ Assistant Shopping | `edge://shopping` | ⭐ Facile |
+| 📋 Collections | `edge://collections` | ⭐ Facile |
+| ⚡ Mode Performance | `edge://performance` | 🔬 Moyen |
 
-### 🌐 À Propos de Chrome *(5 secrets)*
+> 💰 Edge **paie littéralement** les gens pour naviguer !
+> Les Rewards s'échangent contre des cartes cadeaux Xbox, Amazon et plus.
 
-| Secret | Adresse | Niveau |
-|--------|---------|--------|
-| 🪪 Carte d'Identité | `chrome://version` | ⭐ Facile |
-| 📋 État Local (JSON) | `chrome://local-state` | 🤩 Wow ! |
-| 🧩 Composants Chrome | `chrome://components` | 🔬 Moyen |
-| 📊 Informations Système | `chrome://system` | 🔬 Moyen |
-| 📜 Conditions d'Utilisation | `chrome://terms` | ⭐ Facile |
+---
 
-### ⚗️ Laboratoire Secret *(6 secrets)*
+### ⚗️ Laboratoire Secret *(7 secrets)*
 
-| Secret | Adresse | Niveau |
-|--------|---------|--------|
-| ⚗️ Laboratoire (Flags) | `chrome://flags` | 🔬 Moyen |
-| 🔍 Inspecteur DevTools | `chrome://inspect` | 🤩 Wow ! |
-| 📡 Bluetooth Radar | `chrome://bluetooth-internals` | 🔬 Moyen |
-| 📺 Labo Vidéo & Son | `chrome://media-internals` | 🔬 Moyen |
-| 📞 WebRTC (Appels Vidéo) | `chrome://webrtc-internals` | 🤩 Wow ! |
-| 🖨️ Impression | `chrome://print` | ⭐ Facile |
-| 📥 Téléchargements | `chrome://download-internals` | 🔬 Moyen |
+| Secret | 🟢 Chrome | 🔵 Edge | Niveau |
+|--------|-----------|---------|--------|
+| ⚗️ Fonctions cachées (Flags) | `chrome://flags` | `edge://flags` | 🔬 Moyen |
+| 🔍 Inspecteur DevTools | `chrome://inspect` | `edge://inspect` | 🤩 Wow ! |
+| 📡 Radar Bluetooth | `chrome://bluetooth-internals` | `edge://bluetooth-internals` | 🔬 Moyen |
+| 📺 Labo vidéo & son | `chrome://media-internals` | `edge://media-internals` | 🔬 Moyen |
+| 📞 Appels vidéo (WebRTC) | `chrome://webrtc-internals` | `edge://webrtc-internals` | 🤩 Wow ! |
+| 🖨️ Impression | `chrome://print` | `edge://print` | ⭐ Facile |
+| 📥 Téléchargements | `chrome://download-internals` | `edge://download-internals` | 🔬 Moyen |
+
+---
 
 ### 📡 Réseau & Internet *(6 secrets)*
 
-| Secret | Adresse | Niveau |
-|--------|---------|--------|
-| 🌐 Annuaire Internet (DNS) | `chrome://net-internals/#dns` | 🔬 Moyen |
-| 🔌 Connexions TCP | `chrome://net-internals/#sockets` | 🤩 Wow ! |
-| ⚡ HTTP/2 Sessions | `chrome://net-internals/#http2` | 🤩 Wow ! |
-| 🌍 Événements Réseau | `chrome://net-internals/#events` | 🤩 Wow ! |
-| 🔄 Proxy & VPN | `chrome://net-internals/#proxy` | 🔬 Moyen |
-| 🛑 Pages d'Erreur | `chrome://network-errors` | ⭐ Facile |
-
-### 🚀 Performance *(6 secrets)*
-
-| Secret | Adresse | Niveau |
-|--------|---------|--------|
-| 🎨 Carte Graphique (GPU) | `chrome://gpu` | 🔬 Moyen |
-| 🧠 Mémoire RAM | `chrome://memory-internals` | 🔬 Moyen |
-| 😴 Onglets Dormants | `chrome://discards` | 🔬 Moyen |
-| 📈 Histogrammes Perf | `chrome://histograms` | 🤩 Wow ! |
-| 🔬 Traçage Performance | `chrome://tracing` | 🤩 Wow ! |
-| ⚙️ Processus Internes | `chrome://process-internals` | 🤩 Wow ! |
-
-### 🛡️ Sécurité *(4 secrets)*
-
-| Secret | Adresse | Niveau |
-|--------|---------|--------|
-| 🛡️ Gardien Sécurité | `chrome://safe-browsing` | ⭐ Facile |
-| 📦 Sandbox (Bac à Sable) | `chrome://sandbox` | 🔬 Moyen |
-| 🔑 Mots de Passe (Logs) | `chrome://password-manager-internals` | 🔬 Moyen |
-| 🏢 Politiques Entreprise | `chrome://policy` | 🔬 Moyen |
-
-### 💾 Données & Stockage *(4 secrets)*
-
-| Secret | Adresse | Niveau |
-|--------|---------|--------|
-| 💿 Quotas Stockage | `chrome://quota-internals` | 🤩 Wow ! |
-| 🗄️ Base de Données (IndexedDB) | `chrome://indexeddb-internals` | 🤩 Wow ! |
-| ⚡ Service Workers | `chrome://serviceworker-internals` | 🤩 Wow ! |
-| 📊 Engagement Sites | `chrome://site-engagement` | ⭐ Facile |
-
-### 🔄 Synchronisation *(2 secrets)*
-
-| Secret | Adresse | Niveau |
-|--------|---------|--------|
-| 🔄 Synchronisation | `chrome://sync-internals` | 🔬 Moyen |
-| 👤 Connexion Google | `chrome://signin-internals` | 🔬 Moyen |
-
-### 🔧 Outils Avancés *(9 secrets)*
-
-| Secret | Adresse | Niveau |
-|--------|---------|--------|
-| ♿ Accessibilité (A11Y) | `chrome://accessibility` | 🤩 Wow ! |
-| 🔤 Traduction Auto | `chrome://translate-internals` | 🔬 Moyen |
-| 🎯 Prédictions Omnibox | `chrome://predictors` | 🔬 Moyen |
-| 💡 Suggestions Contenu | `chrome://suggestions` | ⭐ Facile |
-| 🖥️ Appareils USB | `chrome://usb-internals` | 🔬 Moyen |
-| 📱 Appareils Proches | `chrome://devices` | ⭐ Facile |
-| 📊 Actions Utilisateur | `chrome://user-actions` | 🤩 Wow ! |
-| 📲 Cast (Chromecast) | `chrome://cast` | ⭐ Facile |
-| 🔔 Invalidations Sync | `chrome://invalidations` | 🤩 Wow ! |
+| Secret | 🟢 Chrome | 🔵 Edge | Niveau |
+|--------|-----------|---------|--------|
+| 🌐 Annuaire Internet (DNS) | `chrome://net-internals/#dns` | `edge://net-internals/#dns` | 🔬 Moyen |
+| 🔌 Connexions TCP | `chrome://net-internals/#sockets` | `edge://net-internals/#sockets` | 🤩 Wow ! |
+| ⚡ HTTP/2 Sessions | `chrome://net-internals/#http2` | `edge://net-internals/#http2` | 🤩 Wow ! |
+| 🌍 Événements réseau | `chrome://net-internals/#events` | `edge://net-internals/#events` | 🤩 Wow ! |
+| 🔄 Proxy & VPN | `chrome://net-internals/#proxy` | `edge://net-internals/#proxy` | 🔬 Moyen |
+| 🛑 Pages d'erreur | `chrome://network-errors` | `edge://network-errors` | ⭐ Facile |
 
 ---
 
-## ⭐ Les niveaux expliqués
+### 🚀 Performance *(6 secrets)*
 
-| Niveau | Signification |
-|--------|---------------|
-| ⭐ **Facile** | Parfait pour commencer ! Rien à configurer, juste observer. |
-| 🔬 **Moyen** | Pour les curieux. Tu peux interagir, mais demande à un adulte avant de changer quoi que ce soit. |
-| 🤩 **Wow !** | Des pages époustouflantes avec des données en temps réel. Impressionnant ! |
+| Secret | 🟢 Chrome | 🔵 Edge | Niveau |
+|--------|-----------|---------|--------|
+| 🎨 Carte graphique (GPU) | `chrome://gpu` | `edge://gpu` | 🔬 Moyen |
+| 🧠 Mémoire RAM | `chrome://memory-internals` | `edge://memory-internals` | 🔬 Moyen |
+| 😴 Onglets dormants | `chrome://discards` | `edge://discards` | 🔬 Moyen |
+| 📈 Histogrammes perf | `chrome://histograms` | `edge://histograms` | 🤩 Wow ! |
+| 🔬 Traçage performance | `chrome://tracing` | `edge://tracing` | 🤩 Wow ! |
+| ⚙️ Processus internes | `chrome://process-internals` | `edge://process-internals` | 🤩 Wow ! |
+
+---
+
+### 🛡️ Sécurité *(4 secrets)*
+
+| Secret | 🟢 Chrome | 🔵 Edge | Niveau |
+|--------|-----------|---------|--------|
+| 🛡️ Gardien sécurité | `chrome://safe-browsing` | `edge://safe-browsing` | ⭐ Facile |
+| 📦 Sandbox (bac à sable) | `chrome://sandbox` | `edge://sandbox` | 🔬 Moyen |
+| 🔑 Mots de passe (logs) | `chrome://password-manager-internals` | `edge://password-manager-internals` | 🔬 Moyen |
+| 🏢 Politiques admin | `chrome://policy` | `edge://policy` | 🔬 Moyen |
+
+---
+
+### 💾 Données & Stockage *(4 secrets)*
+
+| Secret | 🟢 Chrome | 🔵 Edge | Niveau |
+|--------|-----------|---------|--------|
+| 💿 Quotas stockage | `chrome://quota-internals` | `edge://quota-internals` | 🤩 Wow ! |
+| 🗄️ Base de données (IndexedDB) | `chrome://indexeddb-internals` | `edge://indexeddb-internals` | 🤩 Wow ! |
+| ⚡ Service Workers | `chrome://serviceworker-internals` | `edge://serviceworker-internals` | 🤩 Wow ! |
+| 📊 Engagement sites | `chrome://site-engagement` | `edge://site-engagement` | ⭐ Facile |
+
+---
+
+### 🔄 Synchronisation *(2 secrets)*
+
+| Secret | 🟢 Chrome | 🔵 Edge | Niveau |
+|--------|-----------|---------|--------|
+| 🔄 Synchronisation | `chrome://sync-internals` | `edge://sync-internals` | 🔬 Moyen |
+| 👤 Connexion compte | `chrome://signin-internals` | `edge://signin-internals` | 🔬 Moyen |
+
+---
+
+### 🔧 Outils Avancés *(8 secrets)*
+
+| Secret | 🟢 Chrome | 🔵 Edge | Niveau |
+|--------|-----------|---------|--------|
+| ♿ Accessibilité (A11Y) | `chrome://accessibility` | `edge://accessibility` | 🤩 Wow ! |
+| 🔤 Traduction auto | `chrome://translate-internals` | `edge://translate-internals` | 🔬 Moyen |
+| 🎯 Prédictions omnibox | `chrome://predictors` | `edge://predictors` | 🔬 Moyen |
+| 💡 Suggestions contenu | `chrome://suggestions` | `edge://suggestions` | ⭐ Facile |
+| 🖥️ Appareils USB | `chrome://usb-internals` | `edge://usb-internals` | 🔬 Moyen |
+| 📱 Appareils proches | `chrome://devices` | `edge://devices` | ⭐ Facile |
+| 📊 Actions utilisateur | `chrome://user-actions` | `edge://user-actions` | 🤩 Wow ! |
+| 📲 Cast (TV) | `chrome://cast` | `edge://cast` | ⭐ Facile |
+
+---
+
+## ⭐ Les niveaux de difficulté
+
+| Niveau | Pour qui | Exemple |
+|--------|----------|---------|
+| ⭐ **Facile** | Tout le monde dès 8 ans | `chrome://dino` — appuie sur Espace et joue ! |
+| 🔬 **Moyen** | Les curieux, 10 ans+ | `chrome://gpu` — regarde ta carte graphique |
+| 🤩 **Wow !** | Les explorateurs | `chrome://user-actions` — vois chaque clic en direct ! |
+
+> ⚠️ Pour les pages **Moyen** et **Wow**, **demande à un adulte** avant de changer quoi que ce soit.
+> Regarder ne cause jamais de problème — c'est modifier qui peut être risqué.
+
+---
+
+## 🕹️ Les Easter Eggs de l'Application
+
+L'application elle-même cache des surprises ! 🤫
+
+| Action | Surprise |
+|--------|----------|
+| ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️ **B A** au clavier | 🎮 Mode Rétro vert (Konami Code !) |
+| Tape `matrix` au clavier | 💚 Pluie de code Matrix |
+| Tape `debug` au clavier | 🔧 Panneau de débogage secret |
+| Clique plusieurs fois sur le logo | 🐾 La mascotte s'anime ! |
 
 ---
 
 ## 🎨 Personnalisation
 
-### 8 Thèmes disponibles
-
-Ouvre le panneau **⚙️ Paramètres** (bouton en haut à droite) et choisis ton thème préféré :
+### 8 Thèmes (bouton ⚙️ en haut à droite)
 
 | Thème | Ambiance |
 |-------|----------|
@@ -182,132 +266,92 @@ Ouvre le panneau **⚙️ Paramètres** (bouton en haut à droite) et choisis to
 | 🔷 **Zellige Blue** | Bleu azur marocain |
 | 🌿 **Andalus Green** | Vert jardin andalou |
 | 🏡 **Riad** | Ivoire et terracotta *(clair)* |
-| 🕌 **Medina** | Perle et jade *(clair)* |
+| 🕌 **Medina** | Blanc perle et jade *(clair)* |
 | 🌴 **Jungle Quest** | Vert tropical |
 | 🤖 **Robot Lab** | Bleu électrique |
 
 ### 3 Langues
 
-- 🇫🇷 **Français** *(langue par défaut)*
-- 🇬🇧 **English**
-- 🇩🇿 **العربية** — avec mise en page droite-à-gauche automatique !
+- 🇫🇷 Français *(défaut)*
+- 🇬🇧 English
+- 🇩🇿 العربية — mise en page droite-à-gauche automatique !
 
 ---
 
-## 🕹️ Les Easter Eggs cachés dans l'app
-
-L'application cache elle-même des surprises ! Essaie ces codes secrets :
-
-| Code | Résultat |
-|------|----------|
-| ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️ B A | 🎮 Mode Rétro (Konami Code !) |
-| Tape `matrix` au clavier | 💚 Pluie de code Matrix |
-| Tape `debug` au clavier | 🔧 Panneau de débogage |
-| Clique plusieurs fois sur le logo | 🐾 Animation de mascotte |
-| Tape `morse` au clavier | 📡 Mode Morse |
-
----
-
-## 🛠️ Fichiers du projet
-
-```
-workshop-chrome-secrets/
-│
-├── 📄 workshop-chrome-secrets.html   ← L'application complète (standalone)
-│                                       Tout est intégré : CSS + JS + contenu
-│
-└── 📖 README.md                       ← Ce fichier !
-```
-
-> **Note :** Le fichier HTML est **autonome** (standalone). Il contient tout :
-> le style, le code JavaScript, les 47 secrets, les 8 thèmes.
-> Un seul fichier à partager, aucune dépendance !
-
----
-
-## 🔧 Basé sur le template Workshop-DIY v1.2
-
-Cette application est construite sur le **template officiel Workshop-DIY** qui inclut :
-
-- 🎨 **8 thèmes** via `[data-theme]` sur `<html>`
-- 🌐 **i18n trilingue** (FR / EN / AR) avec RTL automatique
-- 📜 **Journal d'activité** avec filtres et export
-- ⚙️ **Panneau Paramètres** coulissant
-- ❓ **Panneau Aide** avec FAQ / Comment faire / Wiki
-- 🐾 **Mascotte animée** Workshop-DIY
-- 🎵 **Effets sonores** optionnels
-- 🌙 **Splash screen** au démarrage
-- 🕌 **Bismillah** animé dans le header
-- 📅 **Date hijri** dans le footer
-- 🎮 Easter eggs : Konami, Matrix rain, debug, mascotte
-
----
-
-## 🏫 Pour les animateurs — Guide de l'atelier
+## 🏫 Guide Animateur
 
 ### Déroulement suggéré (1h30)
 
 | Durée | Activité |
 |-------|----------|
-| **10 min** | Introduction : "Qu'est-ce que Chrome fait vraiment ?" |
-| **5 min** | Démonstration : ouvrir `chrome://dino` ensemble |
-| **30 min** | Exploration libre par catégorie (⭐ Facile d'abord) |
-| **20 min** | Défi en groupe : qui trouve le plus impressionnant ? |
-| **15 min** | Discussion : "Comment fonctionne internet ?" |
-| **10 min** | Questions et partage de découvertes |
+| **10 min** | Introduction : "Connaissez-vous le dinosaure Chrome ?" → montrer `chrome://dino` et `edge://surf` |
+| **5 min** | Expliquer comment copier-coller une URL secrète |
+| **10 min** | Choisir son navigateur et explorer les **⭐ Faciles** ensemble |
+| **30 min** | Exploration libre par catégorie — chaque enfant choisit |
+| **15 min** | Chacun présente le secret le plus surprenant qu'il a trouvé |
+| **10 min** | Discussion : "Chrome vs Edge — lequel préfères-tu et pourquoi ?" |
+| **10 min** | Questions |
 
-### Conseils pédagogiques
+### Les 5 secrets à montrer en premier
 
-- 🦕 **Commencer par `chrome://dino`** — tout le monde connaît le dinosaure, ça brise la glace
-- 📊 **`chrome://site-engagement`** est très fun : les élèves voient leurs propres habitudes de navigation !
-- 🧠 **`chrome://memory-internals`** ouvre un débat sur "pourquoi Chrome ralentit quand on a trop d'onglets"
-- ⚗️ **`chrome://flags`** fascine les élèves mais attention : leur rappeler de ne rien changer sans un adulte
-- 🌐 **`chrome://net-internals/#dns`** est parfait pour expliquer comment fonctionne internet
+1. **`chrome://dino`** / **`edge://surf`** — Le jeu caché ! Tout le monde connaît le dino 🦕
+2. **`chrome://site-engagement`** — Ils voient leurs propres sites préférés avec des scores !
+3. **`chrome://memory-internals`** — "Voilà pourquoi l'ordi rame avec 30 onglets !"
+4. **`chrome://bluetooth-internals`** — Radar qui voit tous les appareils Bluetooth autour d'eux 📡
+5. **`edge://rewards`** — "Edge te donne des points pour naviguer !" 💰
 
-### Questions pour lancer la discussion
+### Questions pour faire réfléchir
 
+- *"Pourquoi Chrome et Edge ont des adresses différentes ?"* → Chromium vs personnalisation
 - *"Qu'est-ce qui se passe quand tu tapes youtube.com ?"* → DNS
-- *"Pourquoi ton ordi est lent quand tu as 30 onglets ?"* → RAM/Discards
-- *"Comment Chrome sait si un site est dangereux ?"* → Safe Browsing
-- *"Est-ce que ton navigateur te 'regarde' ?"* → User Actions, Site Engagement
+- *"Comment le navigateur sait si un site est dangereux ?"* → Safe Browsing
+- *"Pourquoi Edge te donne des points ?"* → Concurrence entre navigateurs
 
 ---
 
-## ⚠️ Avertissements importants
+## ⚠️ Règles importantes
 
-> 🔴 **`chrome://flags`** — Ne change aucun flag sans comprendre ce que ça fait.
-> Certains peuvent rendre Chrome instable. Utilise "Reset all" si quelque chose se passe mal.
+```
+✅ Tu PEUX toujours :        ⚠️ Sans adulte, ne change PAS :
+──────────────────────       ──────────────────────────────
+Regarder toutes              Les flags sur
+les pages                    chrome:// ou edge://flags
 
-> 🟡 **`chrome://local-state`** et **`chrome://system`** — Ces pages affichent des informations
-> sur ton ordinateur. Ne partage pas de screenshots en public.
+Copier et coller             Les fichiers sur
+les adresses                 chrome://local-state
 
-> 🟢 **Regarder** ces pages ne cause aucun dommage. La curiosité est toujours la bienvenue ! 😊
+Jouer au dino 🦕             Les politiques sur
+ou au surf 🏄                chrome://policy
+```
 
 ---
 
-## 🌍 À propos de Workshop-DIY
+## 🗂️ Fichiers du projet
 
-**Workshop-DIY** propose des ateliers d'initiation à l'informatique, à l'IA, à la robotique
-et au code pour les enfants et les familles.
+```
+browser-secrets/
+├── 📄 workshop-browser-secrets.html   ← L'application complète
+│                                        Chrome 🟢 + Edge 🔵 + 8 thèmes
+│                                        Tout intégré, 0 dépendance
+│
+└── 📖 README.md                        ← Ce fichier
+```
 
-- 🌐 Site web : [workshop-diy.org](https://workshop-diy.org)
-- ✉️ Contact : contact@workshop-diy.org
-- 📞 Téléphone : 06 19 51 51 73
-- 📍 Lieu : Salle du Parc du Souvenir, Stade Pierre Duport — Chelles
+---
 
-### Rejoindre Workshop-DIY
+## 🌍 Workshop-DIY
 
-| Statut | Tarif atelier |
-|--------|---------------|
-| 👤 Non-adhérent | 7 € / personne |
+Des ateliers d'initiation à l'informatique, l'IA, la robotique et le code
+pour les enfants et les familles !
+
+| | |
+|-|-|
+| 🌐 Site | [workshop-diy.org](https://workshop-diy.org) |
+| ✉️ Email | contact@workshop-diy.org |
+| 📞 Téléphone | 06 19 51 51 73 |
+| 📍 Lieu | Salle du Parc du Souvenir, Stade Pierre Duport — Chelles |
+| 🎟️ Non-adhérent | 7 € / atelier |
 | ✅ Adhérent | Gratuit |
-
----
-
-## 📝 Licence
-
-Ce projet est développé par Workshop-DIY pour un usage éducatif.
-Libre d'utilisation dans un cadre pédagogique non-commercial.
 
 ---
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Chrome Secrets — Workshop DIY</title>
+  <title>Browser Secrets — Workshop DIY</title>
   <meta name="theme-color" content="#0c0020"/>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Righteous&family=Tajawal:wght@400;500;700&family=Bangers&family=Orbitron:wght@500;700&display=swap" rel="stylesheet"/>
   <style>
@@ -1215,312 +1215,206 @@ body.log-open .app {
 
 
 /* ══════════════════════════════════════════════════
-   CHROME SECRETS — full-page two-column layout
+   BROWSER SECRETS — layout + browser tabs
    ══════════════════════════════════════════════════ */
 
-/* 1 — body fills viewport, no scroll on body */
-html, body {
-  height: 100%;
-  margin: 0; padding: 0;
-  overflow: hidden;
-}
-body {
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  background: var(--bg);
-}
+html, body { height:100%; margin:0; padding:0; overflow:hidden; }
+body { display:flex; align-items:stretch; justify-content:center; background:var(--bg); }
 
-/* 2 — .app is the full-page shell, max 1160px */
 .app {
-  max-width: 1160px;
-  width: 100%;
-  height: 100vh;
-  border-radius: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  max-width:1160px; width:100%; height:100vh;
+  border-radius:0;
+  display:flex; flex-direction:column; overflow:hidden;
 }
+.rows-container { flex-shrink:0; padding:0; }
 
-/* 3 — header stays fixed at top */
-.rows-container {
+/* ── BROWSER TAB SWITCHER ── */
+.browser-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 16px;
+  background: rgba(0,0,0,.25);
+  border-bottom: 1px solid var(--border);
   flex-shrink: 0;
-  padding: 0;
+}
+.browser-tab {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 22px;
+  font-family: var(--font-h); font-size: .78rem;
+  font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--text-muted);
+  background: transparent; border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: all .2s;
+}
+.browser-tab:hover { color: var(--text); transform: none; box-shadow: none; }
+.browser-tab.bt-active { color: var(--text); border-bottom-color: var(--browser-color, var(--accent)); }
+
+/* Chrome tab = green */
+.browser-tab[data-browser="chrome"] { --browser-color: #4ade80; }
+.browser-tab[data-browser="chrome"].bt-active {
+  color: #4ade80;
+}
+/* Edge tab = blue */
+.browser-tab[data-browser="edge"] { --browser-color: #60a5fa; }
+.browser-tab[data-browser="edge"].bt-active {
+  color: #60a5fa;
 }
 
-/* 4 — two-column body fills the rest */
-.cs-body {
-  flex: 1;
-  display: flex;
-  min-height: 0;          /* crucial: allow children to scroll */
-  overflow: hidden;
+.browser-tab-icon { font-size: 1.1rem; }
+.browser-tab-cnt {
+  font-size: .62rem; font-weight: 700;
+  padding: 1px 7px; border-radius: 999px;
+  background: rgba(255,255,255,.08); color: var(--text-muted);
+  transition: background .2s, color .2s;
+}
+.browser-tab[data-browser="chrome"].bt-active .browser-tab-cnt { background: rgba(74,222,128,.2); color: #4ade80; }
+.browser-tab[data-browser="edge"].bt-active .browser-tab-cnt   { background: rgba(96,165,250,.2); color: #60a5fa; }
+
+/* Edge-exclusive badge */
+.edge-only-badge {
+  display: inline-block; font-size: .55rem; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase;
+  padding: 1px 6px; border-radius: 999px;
+  background: rgba(96,165,250,.15); color: #60a5fa;
+  border: 1px solid rgba(96,165,250,.3);
+  vertical-align: middle; margin-left: 4px;
 }
 
-/* ── LEFT SIDEBAR ── */
+/* ── TWO COLUMN ── */
+.cs-body { flex:1; display:flex; min-height:0; overflow:hidden; }
+
 .cs-nav {
-  width: 172px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 12px 8px 12px 12px;
-  border-right: 1px solid var(--border);
-  overflow-y: auto;
-  background: rgba(0,0,0,.15);
+  width:160px; flex-shrink:0;
+  display:flex; flex-direction:column; gap:2px;
+  padding:10px 6px 10px 10px;
+  border-right:1px solid var(--border);
+  overflow-y:auto; background:rgba(0,0,0,.15);
 }
-.cs-nav::-webkit-scrollbar { width: 3px; }
-.cs-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-.cs-nav-lbl {
-  font-size: .58rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .1em;
-  color: var(--text-muted); opacity: .45;
-  padding: 10px 8px 4px;
-}
+.cs-nav::-webkit-scrollbar { width:3px; }
+.cs-nav::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+.cs-nav-section { font-size:.57rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--text-muted); opacity:.4; padding:10px 8px 4px; }
 
 .cs-nav-btn {
-  display: flex; align-items: center; gap: 7px;
-  width: 100%; padding: 8px 10px;
-  border-radius: 10px;
-  background: transparent;
-  color: var(--text-muted);
-  border: 1px solid transparent;
-  font-family: var(--font-b); font-size: .76rem; font-weight: 600;
-  cursor: pointer; text-align: left;
-  transition: background .15s, border-color .15s, color .15s;
+  display:flex; align-items:center; gap:6px;
+  width:100%; padding:7px 9px; border-radius:10px;
+  background:transparent; color:var(--text-muted);
+  border:1px solid transparent;
+  font-family:var(--font-b); font-size:.74rem; font-weight:600;
+  cursor:pointer; text-align:left;
+  transition:background .15s, border-color .15s, color .15s;
 }
-.cs-nav-btn:hover {
-  background: rgba(255,255,255,.06);
-  border-color: var(--border);
-  color: var(--text);
-  transform: none; box-shadow: none;
-}
-.cs-nav-btn.cs-active {
-  background: rgba(255,255,255,.1);
-  border-color: var(--accent);
-  color: var(--text);
-  box-shadow: 0 0 10px var(--glow);
-}
-.cs-nav-ico { font-size: 1rem; flex-shrink: 0; line-height: 1; }
-.cs-nav-lbl-txt { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cs-nav-btn:hover { background:rgba(255,255,255,.06); border-color:var(--border); color:var(--text); transform:none; box-shadow:none; }
+.cs-nav-btn.cs-active { background:rgba(255,255,255,.1); border-color:var(--accent); color:var(--text); box-shadow:0 0 10px var(--glow); }
+.cs-nav-ico { font-size:.95rem; flex-shrink:0; line-height:1; }
+.cs-nav-lbl-txt { flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .cs-nav-cnt {
-  font-size: .6rem; font-weight: 700;
-  background: rgba(255,255,255,.08);
-  color: var(--text-muted);
-  padding: 1px 6px; border-radius: 999px;
-  flex-shrink: 0;
+  font-size:.6rem; font-weight:700;
+  background:rgba(255,255,255,.08); color:var(--text-muted);
+  padding:1px 5px; border-radius:999px; flex-shrink:0;
 }
-.cs-nav-btn.cs-active .cs-nav-cnt {
-  background: var(--accent);
-  color: var(--bg);
-}
+.cs-nav-btn.cs-active .cs-nav-cnt { background:var(--accent); color:var(--bg); }
 
-/* ── MAIN PANEL ── */
-.cs-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.cs-toolbar {
-  flex-shrink: 0;
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 16px 0;
-}
-.cs-title {
-  font-family: var(--font-h);
-  font-size: .9rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: .06em;
-  color: var(--text); flex: 1;
-}
-.cs-subtitle {
-  font-size: .7rem; color: var(--text-muted);
-}
+/* ── MAIN ── */
+.cs-main { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
+.cs-toolbar { flex-shrink:0; display:flex; align-items:center; gap:10px; padding:10px 16px 0; }
+.cs-title { font-family:var(--font-h); font-size:.88rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text); flex:1; }
+.cs-subtitle { font-size:.7rem; color:var(--text-muted); }
 
 .cs-search-bar {
-  flex-shrink: 0;
-  display: flex; align-items: center; gap: 7px;
-  margin: 8px 16px 0;
-  background: rgba(0,0,0,.3);
-  border: 1px solid var(--border); border-radius: 999px;
-  padding: 7px 15px;
-  transition: border-color .2s;
+  flex-shrink:0; display:flex; align-items:center; gap:7px;
+  margin:8px 16px 0;
+  background:rgba(0,0,0,.3); border:1px solid var(--border);
+  border-radius:999px; padding:7px 15px; transition:border-color .2s;
 }
-.cs-search-bar:focus-within { border-color: var(--accent); }
-.cs-search-bar input {
-  flex: 1; border: none; background: transparent;
-  color: var(--text); font-family: var(--font-b);
-  font-size: .78rem; outline: none;
-}
-.cs-search-bar input::placeholder { color: var(--text-muted); opacity: .5; }
+.cs-search-bar:focus-within { border-color:var(--accent); }
+.cs-search-bar input { flex:1; border:none; background:transparent; color:var(--text); font-family:var(--font-b); font-size:.78rem; outline:none; }
+.cs-search-bar input::placeholder { color:var(--text-muted); opacity:.5; }
 
-/* scrollable card area */
-.cs-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px 16px 16px;
-}
-.cs-scroll::-webkit-scrollbar { width: 4px; }
-.cs-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.cs-scroll { flex:1; overflow-y:auto; padding:10px 16px 16px; }
+.cs-scroll::-webkit-scrollbar { width:4px; }
+.cs-scroll::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 
 /* stats card */
 .cs-stats-card {
-  border-radius: 13px;
-  border: 1px solid var(--border);
-  background: var(--panel);
-  padding: 10px 14px 12px;
-  margin-bottom: 12px;
-  position: relative; overflow: hidden;
+  border-radius:13px; border:1px solid var(--border);
+  background:var(--panel); padding:10px 14px 12px;
+  margin-bottom:12px; position:relative; overflow:hidden;
 }
-.cs-stats-card::before {
-  content: var(--card-ornament,'✦');
-  position: absolute; top: 6px; right: 10px;
-  font-size: 10px; color: var(--accent); opacity: .18;
-}
-.cs-stats-title {
-  font-family: var(--font-h); font-size: .82rem;
-  text-transform: uppercase; letter-spacing: .06em;
-  color: var(--text); margin-bottom: 4px;
-  display: flex; align-items: center; gap: 6px;
-}
-.cs-stats-sub {
-  font-size: .72rem; color: var(--text-muted); margin-bottom: 10px;
-}
-.stats-row {
-  display: grid; grid-template-columns: repeat(4,1fr); gap: 7px;
-}
-.stat-box {
-  text-align: center; background: rgba(0,0,0,.25);
-  border: 1px solid var(--border); border-radius: 9px; padding: 6px 4px;
-}
-.stat-n { font-family: var(--font-h); font-size: 1.2rem; color: var(--accent); }
-.stat-l { font-size: .58rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; }
+.cs-stats-card::before { content:var(--card-ornament,'✦'); position:absolute; top:6px; right:10px; font-size:10px; color:var(--accent); opacity:.18; }
+.cs-stats-title { font-family:var(--font-h); font-size:.82rem; text-transform:uppercase; letter-spacing:.06em; color:var(--text); margin-bottom:4px; display:flex; align-items:center; gap:6px; }
+.cs-stats-sub { font-size:.72rem; color:var(--text-muted); margin-bottom:10px; }
+.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+.stat-box { text-align:center; background:rgba(0,0,0,.25); border:1px solid var(--border); border-radius:9px; padding:6px 4px; }
+.stat-n { font-family:var(--font-h); font-size:1.2rem; color:var(--accent); }
+.stat-l { font-size:.58rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:.05em; }
 
 /* card grid */
-.sc-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 10px;
-}
+.sc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(295px,1fr)); gap:10px; }
 
-/* individual secret card */
+/* secret card */
 .sc-card {
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  padding: 12px 13px;
-  background: rgba(0,0,0,.18);
-  transition: border-color .2s, transform .2s;
-  position: relative;
+  border:1px solid var(--border); border-radius:13px;
+  padding:12px 13px; background:rgba(0,0,0,.18);
+  transition:border-color .2s, transform .2s;
+  position:relative;
 }
-.sc-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px var(--glow);
-}
-.sc-card.sc-explored {
-  border-color: rgba(74,222,128,.35);
-  background: rgba(74,222,128,.04);
-}
-.sc-card.sc-explored::after {
-  content: '✅'; position: absolute; top: 8px; right: 10px; font-size: .7rem;
-}
-.sc-card.sc-hidden { display: none !important; }
+.sc-card:hover { border-color:var(--accent); transform:translateY(-2px); box-shadow:0 6px 20px var(--glow); }
+.sc-card.sc-explored { border-color:rgba(74,222,128,.35); background:rgba(74,222,128,.04); }
+.sc-card.sc-explored::after { content:'✅'; position:absolute; top:8px; right:10px; font-size:.7rem; }
+.sc-card.sc-hidden { display:none !important; }
 
-.sc-top { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 7px; }
-.sc-emoji { font-size: 1.5rem; line-height: 1.1; flex-shrink: 0; }
-.sc-meta { flex: 1; min-width: 0; }
-.sc-title {
-  font-size: .8rem; font-weight: 700; color: var(--text);
-  margin-bottom: 5px; line-height: 1.3;
-}
-.lv-badge {
-  display: inline-block; font-size: .58rem; font-weight: 700;
-  letter-spacing: .04em; text-transform: uppercase;
-  padding: 1px 6px; border-radius: 999px;
-  border: 1px solid var(--border); color: var(--text-muted);
-  vertical-align: middle; margin-left: 4px;
-}
-.lv-easy  { border-color: rgba(74,222,128,.45);  color: #4ade80; }
-.lv-med   { border-color: rgba(251,191,36,.45);  color: #fbbf24; }
-.lv-wow   { border-color: rgba(192,132,252,.45); color: #c084fc; }
+/* edge accent on edge cards */
+.sc-card[data-browser="edge"]:hover { border-color:#60a5fa; box-shadow:0 6px 20px rgba(96,165,250,.2); }
 
-/* THE URL BUTTON */
+.sc-top { display:flex; align-items:flex-start; gap:9px; margin-bottom:7px; }
+.sc-emoji { font-size:1.5rem; line-height:1.1; flex-shrink:0; }
+.sc-meta { flex:1; min-width:0; }
+.sc-title { font-size:.8rem; font-weight:700; color:var(--text); margin-bottom:5px; line-height:1.3; }
+
+.lv-badge { display:inline-block; font-size:.58rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:1px 6px; border-radius:999px; border:1px solid var(--border); color:var(--text-muted); vertical-align:middle; margin-left:4px; }
+.lv-easy { border-color:rgba(74,222,128,.45);  color:#4ade80; }
+.lv-med  { border-color:rgba(251,191,36,.45);  color:#fbbf24; }
+.lv-wow  { border-color:rgba(192,132,252,.45); color:#c084fc; }
+
+/* URL row */
 .sc-url-row {
-  display: flex; align-items: center; gap: 6px;
-  background: rgba(0,0,0,.3);
-  border: 1.5px solid var(--accent);
-  border-radius: 999px;
-  padding: 3px 4px 3px 11px;
-  max-width: 100%;
-  width: fit-content;
+  display:flex; align-items:center; gap:6px;
+  background:rgba(0,0,0,.3);
+  border:1.5px solid var(--accent);
+  border-radius:999px; padding:3px 4px 3px 11px;
+  max-width:100%; width:fit-content;
 }
-.sc-url-txt {
-  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
-  font-size: .67rem; color: var(--accent);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  max-width: 215px;
-  flex: 1;
-  cursor: default;
-  user-select: all;
-}
+.sc-card[data-browser="edge"] .sc-url-row { border-color:#60a5fa; }
+.sc-url-txt { font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace; font-size:.67rem; color:var(--accent); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:200px; flex:1; cursor:default; user-select:all; }
+.sc-card[data-browser="edge"] .sc-url-txt { color:#60a5fa; }
 .sc-copy-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 24px; height: 24px; flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--accent);
-  border: none;
-  font-size: .85rem;
-  cursor: pointer;
-  transition: transform .15s, box-shadow .15s;
-  padding: 0; line-height: 1;
+  display:inline-flex; align-items:center; justify-content:center;
+  width:24px; height:24px; flex-shrink:0; border-radius:50%;
+  background:var(--accent); border:none; font-size:.85rem;
+  cursor:pointer; transition:transform .15s, box-shadow .15s; padding:0;
 }
-.sc-copy-btn:hover {
-  transform: scale(1.15);
-  box-shadow: 0 0 10px var(--glow);
-}
+.sc-card[data-browser="edge"] .sc-copy-btn { background:#60a5fa; }
+.sc-copy-btn:hover { transform:scale(1.15); box-shadow:0 0 10px var(--glow); }
 
-.sc-desc {
-  font-size: .75rem; color: var(--text-muted);
-  line-height: 1.6; margin-bottom: 8px;
-}
-.sc-desc strong { color: var(--text); }
-.sc-desc kbd {
-  font-size: .78em; background: rgba(0,0,0,.4); color: var(--text);
-  padding: 1px 4px; border-radius: 4px; border: 1px solid var(--border);
-}
-.tip-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 4px; margin-bottom: 7px;
-}
-.tip {
-  background: rgba(0,0,0,.2); border: 1px solid var(--border);
-  border-radius: 7px; padding: 4px 7px;
-  font-size: .67rem; color: var(--text-muted); line-height: 1.35;
-}
-.sc-fun {
-  background: rgba(0,0,0,.2); border: 1px solid rgba(255,255,255,.06);
-  border-radius: 8px; padding: 6px 9px;
-  font-size: .67rem; color: var(--text-muted); line-height: 1.5;
-}
+.sc-desc { font-size:.75rem; color:var(--text-muted); line-height:1.6; margin-bottom:8px; }
+.sc-desc strong { color:var(--text); }
+.tip-grid { display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-bottom:7px; }
+.tip { background:rgba(0,0,0,.2); border:1px solid var(--border); border-radius:7px; padding:4px 7px; font-size:.67rem; color:var(--text-muted); line-height:1.35; }
+.sc-fun { background:rgba(0,0,0,.2); border:1px solid rgba(255,255,255,.06); border-radius:8px; padding:6px 9px; font-size:.67rem; color:var(--text-muted); line-height:1.5; }
 
-/* footer sits below cs-body */
-.app-footer { flex-shrink: 0; }
-.deco-band.bottom-band { flex-shrink: 0; }
+.app-footer { flex-shrink:0; }
+.deco-band.bottom-band { flex-shrink:0; }
 
-/* ── Mobile: collapse nav to icons ── */
-@media (max-width: 600px) {
-  .cs-nav { width: 48px; padding: 8px 4px; }
-  .cs-nav-lbl, .cs-nav-lbl-txt, .cs-nav-cnt { display: none; }
-  .cs-nav-ico { font-size: 1.2rem; }
-  .cs-nav-btn { justify-content: center; padding: 9px 6px; }
-  .sc-grid { grid-template-columns: 1fr; }
-  .tip-grid { grid-template-columns: 1fr; }
-  .stats-row { grid-template-columns: repeat(2,1fr); }
-  .cs-search-bar { margin: 8px 10px 0; }
-  .cs-toolbar { padding: 10px 10px 0; }
-  .cs-scroll { padding: 8px 10px 16px; }
+@media(max-width:600px) {
+  .cs-nav { width:46px; padding:8px 4px; }
+  .cs-nav-section, .cs-nav-lbl-txt, .cs-nav-cnt { display:none; }
+  .cs-nav-btn { justify-content:center; padding:9px 6px; }
+  .sc-grid { grid-template-columns:1fr; }
+  .tip-grid { grid-template-columns:1fr; }
+  .stats-row { grid-template-columns:repeat(2,1fr); }
+  .browser-tab span:last-child { display:none; }
 }
   </style>
 </head>
@@ -1530,8 +1424,8 @@ body {
   <div class="splash" id="splash" onclick="dismissSplash()">
     <div class="splash-inner">
       <div class="splash-logo" id="splashLogo"></div>
-      <div class="splash-title">Chrome Secrets</div>
-      <div class="splash-sub">🔭 explore · 🕵️ discover · 💡 learn</div>
+      <div class="splash-title">Browser Secrets</div>
+      <div class="splash-sub">🟢 Chrome · 🔵 Edge · 🔭 discover</div>
       <div class="splash-hint">tap to skip</div>
     </div>
   </div>
@@ -1539,7 +1433,7 @@ body {
   <div class="app">
     <div class="deco-band top-band" aria-hidden="true"></div>
 
-    <!-- HEADER (fixed at top) -->
+    <!-- HEADER -->
     <div class="rows-container">
       <div class="header">
         <div class="bismillah" aria-hidden="true">
@@ -1550,123 +1444,129 @@ body {
         <div class="title-block">
           <div class="logo-wrap" id="logoWrap"></div>
           <div>
-            <h1>Chrome Secrets</h1>
-            <div class="subtitle">🔭 explore · 🕵️ discover · 💡 learn</div>
+            <h1>Browser Secrets</h1>
+            <div class="subtitle">🟢 Chrome · 🔵 Edge · 🔭 discover</div>
           </div>
         </div>
         <div class="header-right">
           <div class="header-buttons">
-            <button id="helpBtn" class="btn-icon-only" aria-label="Help">❓</button>
-            <button id="settingsBtn" class="btn-icon-only" aria-label="Settings">⚙️</button>
-            <button id="logBtn" class="btn-icon-only" aria-label="Activity Log">📜</button>
+            <button id="helpBtn" class="btn-icon-only">❓</button>
+            <button id="settingsBtn" class="btn-icon-only">⚙️</button>
+            <button id="logBtn" class="btn-icon-only">📜</button>
           </div>
           <div class="status-pill connected" id="statusPill">
             <span class="status-dot" id="statusDot"></span>
-            <span id="statusText">44 secrets</span>
+            <span id="statusText">🟢 Chrome</span>
           </div>
         </div>
       </div>
+
+      <!-- BROWSER TABS -->
+      <div class="browser-tabs">
+        <button class="browser-tab bt-active" data-browser="chrome" onclick="switchBrowser(this)">
+          <span class="browser-tab-icon">🟢</span>
+          <span>Chrome</span>
+          <span class="browser-tab-cnt" id="cnt_chrome">50</span>
+        </button>
+        <button class="browser-tab" data-browser="edge" onclick="switchBrowser(this)">
+          <span class="browser-tab-icon">🔵</span>
+          <span>Edge</span>
+          <span class="browser-tab-cnt" id="cnt_edge">50</span>
+        </button>
+      </div>
     </div>
 
-    <!-- TWO-COLUMN BODY -->
+    <!-- TWO COLUMNS -->
     <div class="cs-body">
-
-      <!-- LEFT SIDEBAR NAV -->
-      <nav class="cs-nav" aria-label="Catégories">
-        <div class="cs-nav-lbl">Catégories</div>
+      <nav class="cs-nav">
+        <div class="cs-nav-section">Catégories</div>
         <button class="cs-nav-btn cs-active" data-cat="all" onclick="selectCat(this)">
-        <span class="cs-nav-ico">🔭</span>
-        <span class="cs-nav-lbl">Tous</span>
-        <span class="cs-nav-cnt">47</span>
-      </button>
-<button class="cs-nav-btn" data-cat="fun" onclick="selectCat(this)">
-        <span class="cs-nav-ico">🎮</span>
-        <span class="cs-nav-lbl">Fun & Jeux</span>
-        <span class="cs-nav-cnt">4</span>
-      </button>
-<button class="cs-nav-btn" data-cat="chrome" onclick="selectCat(this)">
-        <span class="cs-nav-ico">🌐</span>
-        <span class="cs-nav-lbl">Chrome</span>
-        <span class="cs-nav-cnt">5</span>
-      </button>
-<button class="cs-nav-btn" data-cat="lab" onclick="selectCat(this)">
-        <span class="cs-nav-ico">⚗️</span>
-        <span class="cs-nav-lbl">Laboratoire</span>
-        <span class="cs-nav-cnt">6</span>
-      </button>
-<button class="cs-nav-btn" data-cat="network" onclick="selectCat(this)">
-        <span class="cs-nav-ico">📡</span>
-        <span class="cs-nav-lbl">Réseau</span>
-        <span class="cs-nav-cnt">6</span>
-      </button>
-<button class="cs-nav-btn" data-cat="perf" onclick="selectCat(this)">
-        <span class="cs-nav-ico">🚀</span>
-        <span class="cs-nav-lbl">Performance</span>
-        <span class="cs-nav-cnt">6</span>
-      </button>
-<button class="cs-nav-btn" data-cat="security" onclick="selectCat(this)">
-        <span class="cs-nav-ico">🛡️</span>
-        <span class="cs-nav-lbl">Sécurité</span>
-        <span class="cs-nav-cnt">4</span>
-      </button>
-<button class="cs-nav-btn" data-cat="data" onclick="selectCat(this)">
-        <span class="cs-nav-ico">💾</span>
-        <span class="cs-nav-lbl">Données</span>
-        <span class="cs-nav-cnt">4</span>
-      </button>
-<button class="cs-nav-btn" data-cat="sync" onclick="selectCat(this)">
-        <span class="cs-nav-ico">🔄</span>
-        <span class="cs-nav-lbl">Sync</span>
-        <span class="cs-nav-cnt">2</span>
-      </button>
-<button class="cs-nav-btn" data-cat="tools" onclick="selectCat(this)">
-        <span class="cs-nav-ico">🔧</span>
-        <span class="cs-nav-lbl">Outils</span>
-        <span class="cs-nav-cnt">9</span>
-      </button>
+      <span class="cs-nav-ico">🔭</span>
+      <span class="cs-nav-lbl-txt">Tous</span>
+      <span class="cs-nav-cnt" id="nc_all">–</span>
+    </button>
+<button class="cs-nav-btn " data-cat="fun" onclick="selectCat(this)">
+      <span class="cs-nav-ico">🎮</span>
+      <span class="cs-nav-lbl-txt">Fun & Jeux</span>
+      <span class="cs-nav-cnt" id="nc_fun">–</span>
+    </button>
+<button class="cs-nav-btn " data-cat="info" onclick="selectCat(this)">
+      <span class="cs-nav-ico">🌐</span>
+      <span class="cs-nav-lbl-txt">À Propos</span>
+      <span class="cs-nav-cnt" id="nc_info">–</span>
+    </button>
+<button class="cs-nav-btn " data-cat="edge_only" onclick="selectCat(this)">
+      <span class="cs-nav-ico">🔵</span>
+      <span class="cs-nav-lbl-txt">Exclusifs Edge</span>
+      <span class="cs-nav-cnt" id="nc_edge_only">–</span>
+    </button>
+<button class="cs-nav-btn " data-cat="lab" onclick="selectCat(this)">
+      <span class="cs-nav-ico">⚗️</span>
+      <span class="cs-nav-lbl-txt">Laboratoire</span>
+      <span class="cs-nav-cnt" id="nc_lab">–</span>
+    </button>
+<button class="cs-nav-btn " data-cat="network" onclick="selectCat(this)">
+      <span class="cs-nav-ico">📡</span>
+      <span class="cs-nav-lbl-txt">Réseau</span>
+      <span class="cs-nav-cnt" id="nc_network">–</span>
+    </button>
+<button class="cs-nav-btn " data-cat="perf" onclick="selectCat(this)">
+      <span class="cs-nav-ico">🚀</span>
+      <span class="cs-nav-lbl-txt">Performance</span>
+      <span class="cs-nav-cnt" id="nc_perf">–</span>
+    </button>
+<button class="cs-nav-btn " data-cat="security" onclick="selectCat(this)">
+      <span class="cs-nav-ico">🛡️</span>
+      <span class="cs-nav-lbl-txt">Sécurité</span>
+      <span class="cs-nav-cnt" id="nc_security">–</span>
+    </button>
+<button class="cs-nav-btn " data-cat="data" onclick="selectCat(this)">
+      <span class="cs-nav-ico">💾</span>
+      <span class="cs-nav-lbl-txt">Données</span>
+      <span class="cs-nav-cnt" id="nc_data">–</span>
+    </button>
+<button class="cs-nav-btn " data-cat="sync" onclick="selectCat(this)">
+      <span class="cs-nav-ico">🔄</span>
+      <span class="cs-nav-lbl-txt">Sync</span>
+      <span class="cs-nav-cnt" id="nc_sync">–</span>
+    </button>
+<button class="cs-nav-btn " data-cat="tools" onclick="selectCat(this)">
+      <span class="cs-nav-ico">🔧</span>
+      <span class="cs-nav-lbl-txt">Outils</span>
+      <span class="cs-nav-cnt" id="nc_tools">–</span>
+    </button>
 
       </nav>
 
-      <!-- MAIN CONTENT PANEL -->
       <div class="cs-main">
-
-        <!-- toolbar: title + count -->
         <div class="cs-toolbar">
           <div class="cs-title" id="csTitle">🔭 Tous les Secrets</div>
-          <div class="cs-subtitle" id="csCount">44 secrets</div>
+          <div class="cs-subtitle" id="csCount">–</div>
         </div>
-
-        <!-- search bar -->
         <div class="cs-search-bar">
           <span style="opacity:.4">🔍</span>
-          <input type="text" id="csSearch"
-            placeholder="Cherche… dino, gpu, flags, dns, bluetooth…"
-            oninput="doSearch(this.value)" />
+          <input type="text" id="csSearch" placeholder="Cherche… dino, gpu, flags, dns, surf…" oninput="doSearch(this.value)"/>
         </div>
 
-        <!-- scrollable area -->
         <div class="cs-scroll" id="csScroll">
-
-          <!-- stats card (visible only on "all" with no search) -->
           <div class="cs-stats-card" id="statsCard">
             <div style="display:flex;align-items:center;justify-content:space-between">
               <div>
-                <div class="cs-stats-title">📋 Comment utiliser Chrome Secrets</div>
-                <div class="cs-stats-sub">Tape l'URL dans Chrome (pas Google !) — ou clique le bouton URL pour copier &amp; ouvrir !</div>
+                <div class="cs-stats-title" id="statsBrowserTitle">🟢 Chrome Secrets</div>
+                <div class="cs-stats-sub">Clique 📋 pour copier l'URL → colle dans ton navigateur (Ctrl+L, Ctrl+V)</div>
               </div>
               <div class="pixel-pet pet-idle" id="petBtn"></div>
             </div>
             <div class="stats-row">
-              <div class="stat-box"><div class="stat-n">44</div><div class="stat-l">Secrets</div></div>
+              <div class="stat-box"><div class="stat-n" id="totalCount">50</div><div class="stat-l">Secrets</div></div>
               <div class="stat-box"><div class="stat-n" id="exploredCount">0</div><div class="stat-l">Explorés</div></div>
               <div class="stat-box"><div class="stat-n">9</div><div class="stat-l">Catégories</div></div>
               <div class="stat-box"><div class="stat-n">∞</div><div class="stat-l">Curiosité</div></div>
             </div>
           </div>
 
-          <!-- card grid -->
           <div class="sc-grid" id="scGrid">
-            <div class="sc-card" data-cat="fun">
+            <div class="sc-card" data-cat="fun" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🦕</span>
         <div class="sc-meta">
@@ -1677,26 +1577,52 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Le fameux dino qui apparaît quand internet coupe… jouable <strong>même avec WiFi</strong> ! Appuie sur <kbd>Espace</kbd> pour sauter.</p>
-      <div class="tip-grid"><div class="tip">Espace = sauter 🦘</div><div class="tip">Flèche bas = s'accroupir</div><div class="tip">Accélère avec le score ⚡</div><div class="tip">Bat ton record ! 🏆</div></div>
-      <div class="sc-fun">🤯 Ce jeu s'appelle 'Project Bolan' en interne chez Google. Le dino n'a pas de nom officiel — les fans l'appellent Rex !</div>
-    </div>
-<div class="sc-card" data-cat="fun">
+      <p class="sc-desc">Le fameux dino qui apparaît quand internet coupe — jouable <strong>même avec WiFi</strong> ! Sur Edge c'est un jeu de surf complet 🏄</p>
+      <div class="tip-grid"><div class="tip">Espace = sauter 🦘</div><div class="tip">Flèche bas = s'accroupir</div><div class="tip">Accélère avec le score ⚡</div><div class="tip">Bat ton record 🏆</div></div>
+      <div class="sc-fun">🤯 Le dino Chrome s'appelle 'Project Bolan'. Le jeu de surf Edge est bien plus élaboré — il a des modes, des costumes et des boss !</div>
+    </div><div class="sc-card" data-cat="fun" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🦕</span>
+        <div class="sc-meta">
+          <div class="sc-title">Jeu du Dinosaure <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://surf</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://surf')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Le fameux dino qui apparaît quand internet coupe — jouable <strong>même avec WiFi</strong> ! Sur Edge c'est un jeu de surf complet 🏄</p>
+      <div class="tip-grid"><div class="tip">Espace = sauter 🦘</div><div class="tip">Flèche bas = s'accroupir</div><div class="tip">Accélère avec le score ⚡</div><div class="tip">Bat ton record 🏆</div></div>
+      <div class="sc-fun">🤯 Le dino Chrome s'appelle 'Project Bolan'. Le jeu de surf Edge est bien plus élaboré — il a des modes, des costumes et des boss !</div>
+    </div><div class="sc-card" data-cat="fun" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🗺️</span>
         <div class="sc-meta">
-          <div class="sc-title">Toutes les Adresses <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-title">Toutes les Adresses Secrètes <span class="lv-badge lv-easy">⭐ Facile</span></div>
           <div class="sc-url-row">
             <span class="sc-url-txt">chrome://chrome-urls</span>
             <button class="sc-copy-btn" onclick="copySecret(this,'chrome://chrome-urls')" title="Copier l'URL">📋</button>
           </div>
         </div>
       </div>
-      <p class="sc-desc">La liste <strong>complète</strong> de TOUTES les adresses chrome:// qui existent. La carte au trésor de Chrome !</p>
+      <p class="sc-desc">La liste <strong>complète</strong> de TOUTES les adresses secrètes qui existent. La carte au trésor du navigateur !</p>
       <div class="tip-grid"><div class="tip">80+ adresses secrètes 🗺️</div><div class="tip">Clique sur n'importe laquelle</div><div class="tip">Certaines = développeurs 🔧</div><div class="tip">Change selon les versions</div></div>
-      <div class="sc-fun">🤯 Google ne publie pas cette liste officiellement. chrome://chrome-urls est le seul moyen de les voir toutes !</div>
-    </div>
-<div class="sc-card" data-cat="fun">
+      <div class="sc-fun">🤯 Google et Microsoft ne publient pas ces listes officiellement. Ces pages sont le seul moyen de les voir toutes !</div>
+    </div><div class="sc-card" data-cat="fun" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🗺️</span>
+        <div class="sc-meta">
+          <div class="sc-title">Toutes les Adresses Secrètes <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://edge-urls</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://edge-urls')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">La liste <strong>complète</strong> de TOUTES les adresses secrètes qui existent. La carte au trésor du navigateur !</p>
+      <div class="tip-grid"><div class="tip">80+ adresses secrètes 🗺️</div><div class="tip">Clique sur n'importe laquelle</div><div class="tip">Certaines = développeurs 🔧</div><div class="tip">Change selon les versions</div></div>
+      <div class="sc-fun">🤯 Google et Microsoft ne publient pas ces listes officiellement. Ces pages sont le seul moyen de les voir toutes !</div>
+    </div><div class="sc-card" data-cat="fun" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🌟</span>
         <div class="sc-meta">
@@ -1707,26 +1633,52 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Chrome est construit par des <strong>milliers de bénévoles</strong> dans le monde. Cette page leur rend hommage !</p>
+      <p class="sc-desc">Ces navigateurs sont construits par des <strong>milliers de bénévoles</strong> dans le monde. Cette page leur rend hommage !</p>
       <div class="tip-grid"><div class="tip">Des milliers de contributeurs 👥</div><div class="tip">Beaucoup travaillent gratis 💝</div><div class="tip">Projets du monde entier 🌍</div><div class="tip">Fais défiler… ça finit pas !</div></div>
-      <div class="sc-fun">🤯 Chrome utilise 100+ projets open source. Sans ces héros bénévoles, Chrome ne pourrait pas exister !</div>
-    </div>
-<div class="sc-card" data-cat="fun">
+      <div class="sc-fun">🤯 Chrome et Edge utilisent tous les deux le moteur open source Chromium. Des milliers de bénévoles y contribuent gratuitement !</div>
+    </div><div class="sc-card" data-cat="fun" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🌟</span>
+        <div class="sc-meta">
+          <div class="sc-title">Les Héros (Crédits) <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://credits</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://credits')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Ces navigateurs sont construits par des <strong>milliers de bénévoles</strong> dans le monde. Cette page leur rend hommage !</p>
+      <div class="tip-grid"><div class="tip">Des milliers de contributeurs 👥</div><div class="tip">Beaucoup travaillent gratis 💝</div><div class="tip">Projets du monde entier 🌍</div><div class="tip">Fais défiler… ça finit pas !</div></div>
+      <div class="sc-fun">🤯 Chrome et Edge utilisent tous les deux le moteur open source Chromium. Des milliers de bénévoles y contribuent gratuitement !</div>
+    </div><div class="sc-card" data-cat="fun" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🆕</span>
         <div class="sc-meta">
-          <div class="sc-title">Nouveautés Chrome <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-title">Nouveautés <span class="lv-badge lv-easy">⭐ Facile</span></div>
           <div class="sc-url-row">
             <span class="sc-url-txt">chrome://whats-new</span>
             <button class="sc-copy-btn" onclick="copySecret(this,'chrome://whats-new')" title="Copier l'URL">📋</button>
           </div>
         </div>
       </div>
-      <p class="sc-desc">Toutes les <strong>nouvelles fonctionnalités</strong> de ta version de Chrome ! La page officielle des changelogs.</p>
+      <p class="sc-desc">Toutes les <strong>nouvelles fonctionnalités</strong> de ta version. La page officielle des changelogs.</p>
       <div class="tip-grid"><div class="tip">Nouveautés de ta version 🆕</div><div class="tip">Fonctions récentes 🎉</div><div class="tip">Mises à jour expliquées 📖</div><div class="tip">Toujours à jour !</div></div>
-      <div class="sc-fun">🤯 Google ajoute des dizaines de nouvelles fonctionnalités à Chrome chaque mois ! La plupart s'installent silencieusement.</div>
-    </div>
-<div class="sc-card" data-cat="chrome">
+      <div class="sc-fun">🤯 Chrome et Edge sortent tous les deux une nouvelle version toutes les 4 semaines. La course à la vitesse continue !</div>
+    </div><div class="sc-card" data-cat="fun" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🆕</span>
+        <div class="sc-meta">
+          <div class="sc-title">Nouveautés <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://whats-new</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://whats-new')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Toutes les <strong>nouvelles fonctionnalités</strong> de ta version. La page officielle des changelogs.</p>
+      <div class="tip-grid"><div class="tip">Nouveautés de ta version 🆕</div><div class="tip">Fonctions récentes 🎉</div><div class="tip">Mises à jour expliquées 📖</div><div class="tip">Toujours à jour !</div></div>
+      <div class="sc-fun">🤯 Chrome et Edge sortent tous les deux une nouvelle version toutes les 4 semaines. La course à la vitesse continue !</div>
+    </div><div class="sc-card" data-cat="info" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🪪</span>
         <div class="sc-meta">
@@ -1737,41 +1689,80 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Numéro de version exact, système d'exploitation, chemin d'installation… La <strong>carte d'identité</strong> complète de Chrome !</p>
+      <p class="sc-desc">Numéro de version exact, système d'exploitation, chemin d'installation… La <strong>carte d'identité</strong> complète du navigateur !</p>
       <div class="tip-grid"><div class="tip">Version = 4 chiffres 🔢</div><div class="tip">Mise à jour auto 🔄</div><div class="tip">Nouvelle version / 4 semaines 📅</div><div class="tip">Numéro grand = plus récent</div></div>
-      <div class="sc-fun">🤯 Chrome est sorti en sept. 2008 en version 1.0. Aujourd'hui on dépasse la version 120 — une nouvelle version toutes les 4 semaines !</div>
-    </div>
-<div class="sc-card" data-cat="chrome">
+      <div class="sc-fun">🤯 Chrome est sorti en 2008. Edge a été relancé en 2020 basé sur Chromium — avant il était très différent et peu aimé !</div>
+    </div><div class="sc-card" data-cat="info" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🪪</span>
+        <div class="sc-meta">
+          <div class="sc-title">Carte d'Identité <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://version</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://version')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Numéro de version exact, système d'exploitation, chemin d'installation… La <strong>carte d'identité</strong> complète du navigateur !</p>
+      <div class="tip-grid"><div class="tip">Version = 4 chiffres 🔢</div><div class="tip">Mise à jour auto 🔄</div><div class="tip">Nouvelle version / 4 semaines 📅</div><div class="tip">Numéro grand = plus récent</div></div>
+      <div class="sc-fun">🤯 Chrome est sorti en 2008. Edge a été relancé en 2020 basé sur Chromium — avant il était très différent et peu aimé !</div>
+    </div><div class="sc-card" data-cat="info" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📋</span>
         <div class="sc-meta">
-          <div class="sc-title">État Local (JSON) <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-title">Fichier de Config (JSON) <span class="lv-badge lv-wow">🤩 Wow !</span></div>
           <div class="sc-url-row">
             <span class="sc-url-txt">chrome://local-state</span>
             <button class="sc-copy-btn" onclick="copySecret(this,'chrome://local-state')" title="Copier l'URL">📋</button>
           </div>
         </div>
       </div>
-      <p class="sc-desc">Le fichier de <strong>configuration interne</strong> de Chrome en JSON brut. Ce que Chrome lit au démarrage !</p>
-      <div class="tip-grid"><div class="tip">Format JSON brut 📄</div><div class="tip">Des centaines de paramètres</div><div class="tip">Chrome le lit à chaque boot 🚀</div><div class="tip">Ne modifie pas directement !</div></div>
-      <div class="sc-fun">🤯 Ce fichier est stocké sur ton disque dur. Chrome le lit à chaque démarrage pour savoir comment se comporter !</div>
-    </div>
-<div class="sc-card" data-cat="chrome">
+      <p class="sc-desc">Le fichier de <strong>configuration interne</strong> en JSON brut. Ce que le navigateur lit au démarrage pour ses préférences !</p>
+      <div class="tip-grid"><div class="tip">Format JSON brut 📄</div><div class="tip">Des centaines de paramètres</div><div class="tip">Lu à chaque boot 🚀</div><div class="tip">Ne modifie pas directement !</div></div>
+      <div class="sc-fun">🤯 Ce fichier est stocké sur ton disque dur. Le navigateur le lit à chaque démarrage pour savoir comment se comporter !</div>
+    </div><div class="sc-card" data-cat="info" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📋</span>
+        <div class="sc-meta">
+          <div class="sc-title">Fichier de Config (JSON) <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://local-state</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://local-state')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Le fichier de <strong>configuration interne</strong> en JSON brut. Ce que le navigateur lit au démarrage pour ses préférences !</p>
+      <div class="tip-grid"><div class="tip">Format JSON brut 📄</div><div class="tip">Des centaines de paramètres</div><div class="tip">Lu à chaque boot 🚀</div><div class="tip">Ne modifie pas directement !</div></div>
+      <div class="sc-fun">🤯 Ce fichier est stocké sur ton disque dur. Le navigateur le lit à chaque démarrage pour savoir comment se comporter !</div>
+    </div><div class="sc-card" data-cat="info" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🧩</span>
         <div class="sc-meta">
-          <div class="sc-title">Composants Chrome <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-title">Composants Internes <span class="lv-badge lv-med">🔬 Moyen</span></div>
           <div class="sc-url-row">
             <span class="sc-url-txt">chrome://components</span>
             <button class="sc-copy-btn" onclick="copySecret(this,'chrome://components')" title="Copier l'URL">📋</button>
           </div>
         </div>
       </div>
-      <p class="sc-desc">Chrome est composé de <strong>mini-modules</strong> qui se mettent à jour indépendamment. Tu peux forcer leurs mises à jour !</p>
-      <div class="tip-grid"><div class="tip">Mises à jour indépendantes 🔄</div><div class="tip">'Check for update' ✅</div><div class="tip">WidevineCdm = lire vidéos 🎬</div><div class="tip">Google Update = auto 🤖</div></div>
-      <div class="sc-fun">🤯 Chrome met à jour ses composants en arrière-plan sans que tu le saches ! Tu profites toujours de la dernière version.</div>
-    </div>
-<div class="sc-card" data-cat="chrome">
+      <p class="sc-desc">Le navigateur est composé de <strong>mini-modules</strong> qui se mettent à jour indépendamment. Tu peux forcer leurs mises à jour !</p>
+      <div class="tip-grid"><div class="tip">Mises à jour indépendantes 🔄</div><div class="tip">'Check for update' ✅</div><div class="tip">WidevineCdm = lire vidéos 🎬</div><div class="tip">Mise à jour auto 🤖</div></div>
+      <div class="sc-fun">🤯 Ces composants se mettent à jour en arrière-plan sans que tu le saches. Tu profites toujours de la dernière version !</div>
+    </div><div class="sc-card" data-cat="info" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🧩</span>
+        <div class="sc-meta">
+          <div class="sc-title">Composants Internes <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://components</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://components')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Le navigateur est composé de <strong>mini-modules</strong> qui se mettent à jour indépendamment. Tu peux forcer leurs mises à jour !</p>
+      <div class="tip-grid"><div class="tip">Mises à jour indépendantes 🔄</div><div class="tip">'Check for update' ✅</div><div class="tip">WidevineCdm = lire vidéos 🎬</div><div class="tip">Mise à jour auto 🤖</div></div>
+      <div class="sc-fun">🤯 Ces composants se mettent à jour en arrière-plan sans que tu le saches. Tu profites toujours de la dernière version !</div>
+    </div><div class="sc-card" data-cat="info" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📊</span>
         <div class="sc-meta">
@@ -1782,11 +1773,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Un <strong>rapport complet</strong> sur ton système — mémoire, CPU, extensions, logs… Tout ce que Chrome sait sur ton ordi !</p>
+      <p class="sc-desc">Un <strong>rapport complet</strong> sur ton système — mémoire, CPU, extensions, logs… Tout ce que le navigateur sait sur ton ordi !</p>
       <div class="tip-grid"><div class="tip">Rapport détaillé 🖥️</div><div class="tip">Mémoire en temps réel 💾</div><div class="tip">Liste toutes extensions 🧩</div><div class="tip">Outil de diagnostic 🔧</div></div>
-      <div class="sc-fun">🤯 Les techniciens Google utilisent cette page quand tu as un problème. C'est leur outil de diagnostic secret !</div>
-    </div>
-<div class="sc-card" data-cat="chrome">
+      <div class="sc-fun">🤯 Les techniciens utilisent cette page quand tu as un problème. C'est leur outil de diagnostic secret !</div>
+    </div><div class="sc-card" data-cat="info" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📊</span>
+        <div class="sc-meta">
+          <div class="sc-title">Informations Système <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://system</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://system')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Un <strong>rapport complet</strong> sur ton système — mémoire, CPU, extensions, logs… Tout ce que le navigateur sait sur ton ordi !</p>
+      <div class="tip-grid"><div class="tip">Rapport détaillé 🖥️</div><div class="tip">Mémoire en temps réel 💾</div><div class="tip">Liste toutes extensions 🧩</div><div class="tip">Outil de diagnostic 🔧</div></div>
+      <div class="sc-fun">🤯 Les techniciens utilisent cette page quand tu as un problème. C'est leur outil de diagnostic secret !</div>
+    </div><div class="sc-card" data-cat="info" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📜</span>
         <div class="sc-meta">
@@ -1797,11 +1801,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Le texte complet des <strong>conditions d'utilisation</strong> de Chrome. Ce que tu acceptes quand tu l'installes…</p>
+      <p class="sc-desc">Le texte complet des <strong>conditions d'utilisation</strong>. Ce que tu acceptes quand tu installes le navigateur…</p>
       <div class="tip-grid"><div class="tip">Texte légal complet 📃</div><div class="tip">Disponible hors connexion 📴</div><div class="tip">Peu de gens le lisent 🤫</div><div class="tip">Référence officielle ⚖️</div></div>
       <div class="sc-fun">🤯 Si tu empilais tous les textes légaux que les gens acceptent sans lire en une vie, ça représente 76 jours de lecture !</div>
-    </div>
-<div class="sc-card" data-cat="lab">
+    </div><div class="sc-card" data-cat="info" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📜</span>
+        <div class="sc-meta">
+          <div class="sc-title">Conditions d'Utilisation <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://terms</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://terms')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Le texte complet des <strong>conditions d'utilisation</strong>. Ce que tu acceptes quand tu installes le navigateur…</p>
+      <div class="tip-grid"><div class="tip">Texte légal complet 📃</div><div class="tip">Disponible hors connexion 📴</div><div class="tip">Peu de gens le lisent 🤫</div><div class="tip">Référence officielle ⚖️</div></div>
+      <div class="sc-fun">🤯 Si tu empilais tous les textes légaux que les gens acceptent sans lire en une vie, ça représente 76 jours de lecture !</div>
+    </div><div class="sc-card" data-cat="lab" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">⚗️</span>
         <div class="sc-meta">
@@ -1815,8 +1832,21 @@ body {
       <p class="sc-desc">Active des fonctionnalités <strong>cachées en test</strong> avant leur sortie officielle. Comme avoir les jouets avant Noël ! ⚠️ Demande à un adulte.</p>
       <div class="tip-grid"><div class="tip">300+ expériences 🧪</div><div class="tip">Reset all pour annuler 🔙</div><div class="tip">Dark mode auto 🌙</div><div class="tip">Certains flags = instables ⚠️</div></div>
       <div class="sc-fun">🤯 Ces options s'appellent 'flags' car les développeurs 'lèvent un drapeau' pour activer une feature en test !</div>
-    </div>
-<div class="sc-card" data-cat="lab">
+    </div><div class="sc-card" data-cat="lab" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">⚗️</span>
+        <div class="sc-meta">
+          <div class="sc-title">Laboratoire (Flags) <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://flags</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://flags')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Active des fonctionnalités <strong>cachées en test</strong> avant leur sortie officielle. Comme avoir les jouets avant Noël ! ⚠️ Demande à un adulte.</p>
+      <div class="tip-grid"><div class="tip">300+ expériences 🧪</div><div class="tip">Reset all pour annuler 🔙</div><div class="tip">Dark mode auto 🌙</div><div class="tip">Certains flags = instables ⚠️</div></div>
+      <div class="sc-fun">🤯 Ces options s'appellent 'flags' car les développeurs 'lèvent un drapeau' pour activer une feature en test !</div>
+    </div><div class="sc-card" data-cat="lab" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🔍</span>
         <div class="sc-meta">
@@ -1829,9 +1859,22 @@ body {
       </div>
       <p class="sc-desc">Inspecte les <strong>pages web, extensions, workers</strong>… L'outil des développeurs pour voir les coulisses d'un site !</p>
       <div class="tip-grid"><div class="tip">Inspecte les onglets 🔭</div><div class="tip">Voir les Service Workers ⚙️</div><div class="tip">Connecte Android 📱</div><div class="tip">Outil pro des devs 💻</div></div>
-      <div class="sc-fun">🤯 C'est grâce à cet outil que les développeurs trouvent les bugs. Un bug = une erreur dans le code à corriger !</div>
-    </div>
-<div class="sc-card" data-cat="lab">
+      <div class="sc-fun">🤯 C'est grâce à cet outil que les développeurs trouvent les bugs dans les sites web !</div>
+    </div><div class="sc-card" data-cat="lab" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🔍</span>
+        <div class="sc-meta">
+          <div class="sc-title">Inspecteur DevTools <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://inspect</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://inspect')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Inspecte les <strong>pages web, extensions, workers</strong>… L'outil des développeurs pour voir les coulisses d'un site !</p>
+      <div class="tip-grid"><div class="tip">Inspecte les onglets 🔭</div><div class="tip">Voir les Service Workers ⚙️</div><div class="tip">Connecte Android 📱</div><div class="tip">Outil pro des devs 💻</div></div>
+      <div class="sc-fun">🤯 C'est grâce à cet outil que les développeurs trouvent les bugs dans les sites web !</div>
+    </div><div class="sc-card" data-cat="lab" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📡</span>
         <div class="sc-meta">
@@ -1842,11 +1885,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Vois <strong>tous les appareils Bluetooth</strong> que Chrome peut 'entendre' autour de toi ! Comme un radar invisible.</p>
+      <p class="sc-desc">Vois <strong>tous les appareils Bluetooth</strong> que le navigateur peut 'entendre' autour de toi ! Comme un radar invisible.</p>
       <div class="tip-grid"><div class="tip">Détecte écouteurs & claviers 🎧</div><div class="tip">RSSI = force du signal 📶</div><div class="tip">Clique 'Start Scan' 🔍</div><div class="tip">Proche de 0 = plus fort !</div></div>
       <div class="sc-fun">🤯 Bluetooth est nommé d'après Harald Ier de Danemark, un roi viking ! Son logo est ses initiales H+B en runes vikings. 🪓</div>
-    </div>
-<div class="sc-card" data-cat="lab">
+    </div><div class="sc-card" data-cat="lab" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📡</span>
+        <div class="sc-meta">
+          <div class="sc-title">Bluetooth Radar <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://bluetooth-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://bluetooth-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Vois <strong>tous les appareils Bluetooth</strong> que le navigateur peut 'entendre' autour de toi ! Comme un radar invisible.</p>
+      <div class="tip-grid"><div class="tip">Détecte écouteurs & claviers 🎧</div><div class="tip">RSSI = force du signal 📶</div><div class="tip">Clique 'Start Scan' 🔍</div><div class="tip">Proche de 0 = plus fort !</div></div>
+      <div class="sc-fun">🤯 Bluetooth est nommé d'après Harald Ier de Danemark, un roi viking ! Son logo est ses initiales H+B en runes vikings. 🪓</div>
+    </div><div class="sc-card" data-cat="lab" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📺</span>
         <div class="sc-meta">
@@ -1857,11 +1913,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Lance une vidéo YouTube puis reviens ici ! Tu verras Chrome <strong>décoder la vidéo</strong> en temps réel.</p>
+      <p class="sc-desc">Lance une vidéo YouTube puis reviens ici ! Tu verras le navigateur <strong>décoder la vidéo</strong> en temps réel.</p>
       <div class="tip-grid"><div class="tip">Ouvre YouTube d'abord 🎬</div><div class="tip">FPS = images/seconde 🎞️</div><div class="tip">30+ FPS = fluide ✅</div><div class="tip">Stats en direct ⚡</div></div>
       <div class="sc-fun">🤯 Une vidéo YouTube à 60 fps montre 60 images entières chaque seconde. Tes yeux les fusionnent en mouvement ! 🎥</div>
-    </div>
-<div class="sc-card" data-cat="lab">
+    </div><div class="sc-card" data-cat="lab" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📺</span>
+        <div class="sc-meta">
+          <div class="sc-title">Labo Vidéo & Son <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://media-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://media-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Lance une vidéo YouTube puis reviens ici ! Tu verras le navigateur <strong>décoder la vidéo</strong> en temps réel.</p>
+      <div class="tip-grid"><div class="tip">Ouvre YouTube d'abord 🎬</div><div class="tip">FPS = images/seconde 🎞️</div><div class="tip">30+ FPS = fluide ✅</div><div class="tip">Stats en direct ⚡</div></div>
+      <div class="sc-fun">🤯 Une vidéo YouTube à 60 fps montre 60 images entières chaque seconde. Tes yeux les fusionnent en mouvement ! 🎥</div>
+    </div><div class="sc-card" data-cat="lab" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📞</span>
         <div class="sc-meta">
@@ -1872,11 +1941,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Lance un appel vidéo (Meet, Discord) pour voir cette page <strong>s'animer</strong> avec les stats de connexion en direct !</p>
-      <div class="tip-grid"><div class="tip">Lance Meet d'abord 📞</div><div class="tip">Stats connexion live 📊</div><div class="tip">Bitrate, latence, paquets 📡</div><div class="tip">Graphiques animés 📈</div></div>
+      <p class="sc-desc">Lance un appel vidéo (Meet, Teams) pour voir cette page <strong>s'animer</strong> avec les stats de connexion en direct !</p>
+      <div class="tip-grid"><div class="tip">Lance Meet/Teams d'abord 📞</div><div class="tip">Stats connexion live 📊</div><div class="tip">Bitrate, latence, paquets 📡</div><div class="tip">Graphiques animés 📈</div></div>
       <div class="sc-fun">🤯 WebRTC signifie 'Web Real-Time Communication'. Ça permet les appels vidéo dans le navigateur sans rien installer !</div>
-    </div>
-<div class="sc-card" data-cat="lab">
+    </div><div class="sc-card" data-cat="lab" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📞</span>
+        <div class="sc-meta">
+          <div class="sc-title">WebRTC (Appels Vidéo) <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://webrtc-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://webrtc-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Lance un appel vidéo (Meet, Teams) pour voir cette page <strong>s'animer</strong> avec les stats de connexion en direct !</p>
+      <div class="tip-grid"><div class="tip">Lance Meet/Teams d'abord 📞</div><div class="tip">Stats connexion live 📊</div><div class="tip">Bitrate, latence, paquets 📡</div><div class="tip">Graphiques animés 📈</div></div>
+      <div class="sc-fun">🤯 WebRTC signifie 'Web Real-Time Communication'. Ça permet les appels vidéo dans le navigateur sans rien installer !</div>
+    </div><div class="sc-card" data-cat="lab" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🖨️</span>
         <div class="sc-meta">
@@ -1889,9 +1971,22 @@ body {
       </div>
       <p class="sc-desc">Ouvre directement le <strong>dialogue d'impression</strong>. Exactement comme Ctrl+P depuis une adresse secrète !</p>
       <div class="tip-grid"><div class="tip">Même chose que Ctrl+P ⌨️</div><div class="tip">Prévisualise avant 👁️</div><div class="tip">Choisir l'imprimante 🖨️</div><div class="tip">Sauvegarder en PDF 📄</div></div>
-      <div class="sc-fun">🤯 Chrome génère un rendu PDF de la page avant de l'envoyer à l'imprimante. C'est pour ça que les impressions web sont nettes !</div>
-    </div>
-<div class="sc-card" data-cat="lab">
+      <div class="sc-fun">🤯 Le navigateur génère un rendu PDF de la page avant de l'envoyer à l'imprimante. C'est pour ça que les impressions web sont nettes !</div>
+    </div><div class="sc-card" data-cat="lab" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🖨️</span>
+        <div class="sc-meta">
+          <div class="sc-title">Impression <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://print</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://print')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Ouvre directement le <strong>dialogue d'impression</strong>. Exactement comme Ctrl+P depuis une adresse secrète !</p>
+      <div class="tip-grid"><div class="tip">Même chose que Ctrl+P ⌨️</div><div class="tip">Prévisualise avant 👁️</div><div class="tip">Choisir l'imprimante 🖨️</div><div class="tip">Sauvegarder en PDF 📄</div></div>
+      <div class="sc-fun">🤯 Le navigateur génère un rendu PDF de la page avant de l'envoyer à l'imprimante. C'est pour ça que les impressions web sont nettes !</div>
+    </div><div class="sc-card" data-cat="lab" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📥</span>
         <div class="sc-meta">
@@ -1904,9 +1999,22 @@ body {
       </div>
       <p class="sc-desc">Les <strong>détails internes</strong> de chaque téléchargement — état, vitesse, source, hash de sécurité…</p>
       <div class="tip-grid"><div class="tip">Détails de chaque download 📥</div><div class="tip">Statut en cours/terminé ✅</div><div class="tip">Hash de vérification 🔐</div><div class="tip">Source URL exacte 🔗</div></div>
-      <div class="sc-fun">🤯 Chrome vérifie le hash de chaque fichier téléchargé pour s'assurer qu'il n'a pas été modifié par un hacker !</div>
-    </div>
-<div class="sc-card" data-cat="network">
+      <div class="sc-fun">🤯 Le navigateur vérifie le hash de chaque fichier téléchargé pour s'assurer qu'il n'a pas été modifié par un hacker !</div>
+    </div><div class="sc-card" data-cat="lab" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📥</span>
+        <div class="sc-meta">
+          <div class="sc-title">Téléchargements <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://download-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://download-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Les <strong>détails internes</strong> de chaque téléchargement — état, vitesse, source, hash de sécurité…</p>
+      <div class="tip-grid"><div class="tip">Détails de chaque download 📥</div><div class="tip">Statut en cours/terminé ✅</div><div class="tip">Hash de vérification 🔐</div><div class="tip">Source URL exacte 🔗</div></div>
+      <div class="sc-fun">🤯 Le navigateur vérifie le hash de chaque fichier téléchargé pour s'assurer qu'il n'a pas été modifié par un hacker !</div>
+    </div><div class="sc-card" data-cat="network" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🌐</span>
         <div class="sc-meta">
@@ -1917,11 +2025,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Quand tu tapes youtube.com, Chrome trouve l'<strong>adresse en chiffres</strong> du serveur. Vois sa mémoire d'adresses !</p>
+      <p class="sc-desc">Quand tu tapes youtube.com, le navigateur trouve l'<strong>adresse en chiffres</strong> du serveur. Vois sa mémoire d'adresses !</p>
       <div class="tip-grid"><div class="tip">youtube.com = 142.250.74.46 🔢</div><div class="tip">Cache = mémoire 💾</div><div class="tip">'Clear host cache' 🗑️</div><div class="tip">Sites en cache = rapide ⚡</div></div>
       <div class="sc-fun">🤯 Internet a seulement 13 'serveurs racines' dans le monde qui connaissent l'adresse de TOUT. Sans eux, plus d'internet !</div>
-    </div>
-<div class="sc-card" data-cat="network">
+    </div><div class="sc-card" data-cat="network" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🌐</span>
+        <div class="sc-meta">
+          <div class="sc-title">Annuaire Internet (DNS) <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://net-internals/#dns</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://net-internals/#dns')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Quand tu tapes youtube.com, le navigateur trouve l'<strong>adresse en chiffres</strong> du serveur. Vois sa mémoire d'adresses !</p>
+      <div class="tip-grid"><div class="tip">youtube.com = 142.250.74.46 🔢</div><div class="tip">Cache = mémoire 💾</div><div class="tip">'Clear host cache' 🗑️</div><div class="tip">Sites en cache = rapide ⚡</div></div>
+      <div class="sc-fun">🤯 Internet a seulement 13 'serveurs racines' dans le monde qui connaissent l'adresse de TOUT. Sans eux, plus d'internet !</div>
+    </div><div class="sc-card" data-cat="network" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🔌</span>
         <div class="sc-meta">
@@ -1934,9 +2055,22 @@ body {
       </div>
       <p class="sc-desc">Vois toutes les <strong>connexions actives</strong> — les fils invisibles qui relient ton ordi aux serveurs du monde !</p>
       <div class="tip-grid"><div class="tip">Connexions ouvertes live 🔗</div><div class="tip">Flux entrants/sortants 📊</div><div class="tip">'Flush socket pools' 🔌</div><div class="tip">Chaque onglet = plusieurs connexions</div></div>
-      <div class="sc-fun">🤯 Un 'socket' est comme un tuyau invisible entre ton ordi et un serveur. Chrome peut en avoir des dizaines ouverts !</div>
-    </div>
-<div class="sc-card" data-cat="network">
+      <div class="sc-fun">🤯 Un 'socket' est comme un tuyau invisible entre ton ordi et un serveur. Le navigateur peut en avoir des dizaines ouverts !</div>
+    </div><div class="sc-card" data-cat="network" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🔌</span>
+        <div class="sc-meta">
+          <div class="sc-title">Connexions TCP <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://net-internals/#sockets</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://net-internals/#sockets')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Vois toutes les <strong>connexions actives</strong> — les fils invisibles qui relient ton ordi aux serveurs du monde !</p>
+      <div class="tip-grid"><div class="tip">Connexions ouvertes live 🔗</div><div class="tip">Flux entrants/sortants 📊</div><div class="tip">'Flush socket pools' 🔌</div><div class="tip">Chaque onglet = plusieurs connexions</div></div>
+      <div class="sc-fun">🤯 Un 'socket' est comme un tuyau invisible entre ton ordi et un serveur. Le navigateur peut en avoir des dizaines ouverts !</div>
+    </div><div class="sc-card" data-cat="network" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">⚡</span>
         <div class="sc-meta">
@@ -1947,11 +2081,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">HTTP/2 est le <strong>protocole rapide</strong> que Chrome utilise avec les serveurs modernes. Vois ces sessions en direct !</p>
+      <p class="sc-desc">HTTP/2 est le <strong>protocole rapide</strong> utilisé avec les serveurs modernes. Vois ces sessions en direct !</p>
       <div class="tip-grid"><div class="tip">HTTP/2 = protocole rapide 🚀</div><div class="tip">Multi-requêtes simultanées 📡</div><div class="tip">Compression headers 📦</div><div class="tip">Tous les gros sites l'utilisent</div></div>
       <div class="sc-fun">🤯 HTTP/2 est 50% plus rapide que HTTP/1 ! Il envoie plusieurs fichiers en même temps — comme une autoroute multi-voies. 🚗</div>
-    </div>
-<div class="sc-card" data-cat="network">
+    </div><div class="sc-card" data-cat="network" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">⚡</span>
+        <div class="sc-meta">
+          <div class="sc-title">HTTP/2 Sessions <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://net-internals/#http2</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://net-internals/#http2')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">HTTP/2 est le <strong>protocole rapide</strong> utilisé avec les serveurs modernes. Vois ces sessions en direct !</p>
+      <div class="tip-grid"><div class="tip">HTTP/2 = protocole rapide 🚀</div><div class="tip">Multi-requêtes simultanées 📡</div><div class="tip">Compression headers 📦</div><div class="tip">Tous les gros sites l'utilisent</div></div>
+      <div class="sc-fun">🤯 HTTP/2 est 50% plus rapide que HTTP/1 ! Il envoie plusieurs fichiers en même temps — comme une autoroute multi-voies. 🚗</div>
+    </div><div class="sc-card" data-cat="network" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🌍</span>
         <div class="sc-meta">
@@ -1962,11 +2109,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Un flux en <strong>temps réel</strong> de tout ce que Chrome fait sur le réseau — chaque requête, DNS, connexion…</p>
+      <p class="sc-desc">Un flux en <strong>temps réel</strong> de tout ce que le navigateur fait sur le réseau — chaque requête, DNS, connexion…</p>
       <div class="tip-grid"><div class="tip">Milliers d'événements/min ⚡</div><div class="tip">Filtre par type 🔍</div><div class="tip">Timestampé à la ms ⏱️</div><div class="tip">Mode Matrix pour devs ! 💚</div></div>
-      <div class="sc-fun">🤯 Quand tu charges une page, Chrome fait parfois 50 à 100 requêtes réseau différentes en quelques secondes !</div>
-    </div>
-<div class="sc-card" data-cat="network">
+      <div class="sc-fun">🤯 Quand tu charges une page, le navigateur fait parfois 50 à 100 requêtes réseau différentes en quelques secondes !</div>
+    </div><div class="sc-card" data-cat="network" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🌍</span>
+        <div class="sc-meta">
+          <div class="sc-title">Événements Réseau <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://net-internals/#events</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://net-internals/#events')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Un flux en <strong>temps réel</strong> de tout ce que le navigateur fait sur le réseau — chaque requête, DNS, connexion…</p>
+      <div class="tip-grid"><div class="tip">Milliers d'événements/min ⚡</div><div class="tip">Filtre par type 🔍</div><div class="tip">Timestampé à la ms ⏱️</div><div class="tip">Mode Matrix pour devs ! 💚</div></div>
+      <div class="sc-fun">🤯 Quand tu charges une page, le navigateur fait parfois 50 à 100 requêtes réseau différentes en quelques secondes !</div>
+    </div><div class="sc-card" data-cat="network" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🔄</span>
         <div class="sc-meta">
@@ -1977,11 +2137,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Vois si Chrome passe par un <strong>proxy ou VPN</strong> pour accéder à internet. Un intermédiaire invisible !</p>
+      <p class="sc-desc">Vois si le navigateur passe par un <strong>proxy ou VPN</strong> pour accéder à internet. Un intermédiaire invisible !</p>
       <div class="tip-grid"><div class="tip">Config proxy actuelle 🔭</div><div class="tip">Direct = pas de proxy ✅</div><div class="tip">Diagnostic réseau 🔧</div><div class="tip">Re-apply pour actualiser 🔄</div></div>
       <div class="sc-fun">🤯 Un VPN crée un tunnel secret sur internet. Comme voyager dans un tube invisible — personne ne voit où tu vas ! 🚇</div>
-    </div>
-<div class="sc-card" data-cat="network">
+    </div><div class="sc-card" data-cat="network" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🔄</span>
+        <div class="sc-meta">
+          <div class="sc-title">Proxy & VPN <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://net-internals/#proxy</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://net-internals/#proxy')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Vois si le navigateur passe par un <strong>proxy ou VPN</strong> pour accéder à internet. Un intermédiaire invisible !</p>
+      <div class="tip-grid"><div class="tip">Config proxy actuelle 🔭</div><div class="tip">Direct = pas de proxy ✅</div><div class="tip">Diagnostic réseau 🔧</div><div class="tip">Re-apply pour actualiser 🔄</div></div>
+      <div class="sc-fun">🤯 Un VPN crée un tunnel secret sur internet. Comme voyager dans un tube invisible — personne ne voit où tu vas ! 🚇</div>
+    </div><div class="sc-card" data-cat="network" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🛑</span>
         <div class="sc-meta">
@@ -1992,11 +2165,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Toutes les <strong>pages d'erreur réseau</strong> de Chrome — ERR_CONNECTION_REFUSED, DNS_PROBE_FAILED, etc.</p>
+      <p class="sc-desc">Toutes les <strong>pages d'erreur réseau</strong> — ERR_CONNECTION_REFUSED, DNS_PROBE_FAILED, etc.</p>
       <div class="tip-grid"><div class="tip">Toutes les erreurs listées 🚫</div><div class="tip">Codes d'erreur 📖</div><div class="tip">ERR_NAME_NOT_RESOLVED 🔍</div><div class="tip">Pratique pour comprendre !</div></div>
-      <div class="sc-fun">🤯 Il existe plus de 100 types d'erreurs réseau dans Chrome ! Chacune a un code unique comme -6, -105, -137…</div>
-    </div>
-<div class="sc-card" data-cat="perf">
+      <div class="sc-fun">🤯 Il existe plus de 100 types d'erreurs réseau ! Chacune a un code unique comme -6, -105, -137…</div>
+    </div><div class="sc-card" data-cat="network" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🛑</span>
+        <div class="sc-meta">
+          <div class="sc-title">Pages d'Erreur <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://network-errors</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://network-errors')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Toutes les <strong>pages d'erreur réseau</strong> — ERR_CONNECTION_REFUSED, DNS_PROBE_FAILED, etc.</p>
+      <div class="tip-grid"><div class="tip">Toutes les erreurs listées 🚫</div><div class="tip">Codes d'erreur 📖</div><div class="tip">ERR_NAME_NOT_RESOLVED 🔍</div><div class="tip">Pratique pour comprendre !</div></div>
+      <div class="sc-fun">🤯 Il existe plus de 100 types d'erreurs réseau ! Chacune a un code unique comme -6, -105, -137…</div>
+    </div><div class="sc-card" data-cat="perf" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🎨</span>
         <div class="sc-meta">
@@ -2010,8 +2196,21 @@ body {
       <p class="sc-desc">Chaque pixel est dessiné par le <strong>GPU</strong> des milliers de fois par seconde ! Vois tout ce qu'il fait pour toi.</p>
       <div class="tip-grid"><div class="tip">Marque ta carte graphique 🖥️</div><div class="tip">Accélération matérielle ✅/❌</div><div class="tip">Jeux fluides ou saccadés 🎮</div><div class="tip">GPU chauffe comme muscles ! 🌡️</div></div>
       <div class="sc-fun">🤯 Un GPU gaming a des milliers de processeurs. Ton CPU n'en a que 4 à 16. Le GPU excelle en parallèle — comme l'IA ! 🤖</div>
-    </div>
-<div class="sc-card" data-cat="perf">
+    </div><div class="sc-card" data-cat="perf" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🎨</span>
+        <div class="sc-meta">
+          <div class="sc-title">Carte Graphique (GPU) <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://gpu</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://gpu')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Chaque pixel est dessiné par le <strong>GPU</strong> des milliers de fois par seconde ! Vois tout ce qu'il fait pour toi.</p>
+      <div class="tip-grid"><div class="tip">Marque ta carte graphique 🖥️</div><div class="tip">Accélération matérielle ✅/❌</div><div class="tip">Jeux fluides ou saccadés 🎮</div><div class="tip">GPU chauffe comme muscles ! 🌡️</div></div>
+      <div class="sc-fun">🤯 Un GPU gaming a des milliers de processeurs. Ton CPU n'en a que 4 à 16. Le GPU excelle en parallèle — comme l'IA ! 🤖</div>
+    </div><div class="sc-card" data-cat="perf" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🧠</span>
         <div class="sc-meta">
@@ -2025,8 +2224,21 @@ body {
       <p class="sc-desc">Vois exactement <strong>combien de RAM</strong> chaque onglet consomme. Trop d'onglets = ordi lent !</p>
       <div class="tip-grid"><div class="tip">Mémoire par onglet 💾</div><div class="tip">Extensions = consomment RAM 🧩</div><div class="tip">Fermer onglets libère RAM 🗑️</div><div class="tip">Chrome = champion RAM 🐋</div></div>
       <div class="sc-fun">🤯 Chrome utilise un processus séparé pour chaque onglet. Si un onglet plante, les autres continuent !</div>
-    </div>
-<div class="sc-card" data-cat="perf">
+    </div><div class="sc-card" data-cat="perf" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🧠</span>
+        <div class="sc-meta">
+          <div class="sc-title">Mémoire RAM <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://memory-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://memory-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Vois exactement <strong>combien de RAM</strong> chaque onglet consomme. Trop d'onglets = ordi lent !</p>
+      <div class="tip-grid"><div class="tip">Mémoire par onglet 💾</div><div class="tip">Extensions = consomment RAM 🧩</div><div class="tip">Fermer onglets libère RAM 🗑️</div><div class="tip">Chrome = champion RAM 🐋</div></div>
+      <div class="sc-fun">🤯 Chrome utilise un processus séparé pour chaque onglet. Si un onglet plante, les autres continuent !</div>
+    </div><div class="sc-card" data-cat="perf" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">😴</span>
         <div class="sc-meta">
@@ -2037,11 +2249,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Quand Chrome manque de mémoire, il <strong>'endort'</strong> les onglets inactifs. Vois quels onglets sont vivants !</p>
+      <p class="sc-desc">Quand le navigateur manque de mémoire, il <strong>'endort'</strong> les onglets inactifs. Vois lesquels sont vivants !</p>
       <div class="tip-grid"><div class="tip">Onglets dormants 😴</div><div class="tip">Statut Active/Discarded 💤</div><div class="tip">Urgency = priorité 📊</div><div class="tip">Forcer un discard 🧪</div></div>
-      <div class="sc-fun">🤯 Chrome décide quels onglets endormir selon ton comportement. Il apprend quels sites tu visites souvent !</div>
-    </div>
-<div class="sc-card" data-cat="perf">
+      <div class="sc-fun">🤯 Le navigateur décide intelligemment quels onglets endormir selon ton comportement. Il apprend tes habitudes !</div>
+    </div><div class="sc-card" data-cat="perf" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">😴</span>
+        <div class="sc-meta">
+          <div class="sc-title">Onglets Dormants <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://discards</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://discards')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Quand le navigateur manque de mémoire, il <strong>'endort'</strong> les onglets inactifs. Vois lesquels sont vivants !</p>
+      <div class="tip-grid"><div class="tip">Onglets dormants 😴</div><div class="tip">Statut Active/Discarded 💤</div><div class="tip">Urgency = priorité 📊</div><div class="tip">Forcer un discard 🧪</div></div>
+      <div class="sc-fun">🤯 Le navigateur décide intelligemment quels onglets endormir selon ton comportement. Il apprend tes habitudes !</div>
+    </div><div class="sc-card" data-cat="perf" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📈</span>
         <div class="sc-meta">
@@ -2052,11 +2277,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Des <strong>milliers de graphiques</strong> qui mesurent les performances internes de Chrome depuis son démarrage.</p>
-      <div class="tip-grid"><div class="tip">Des milliers d'histogrammes 📊</div><div class="tip">Filtre dans la barre 🔍</div><div class="tip">Chaque métrique = graphique 📈</div><div class="tip">Données depuis boot Chrome</div></div>
-      <div class="sc-fun">🤯 Google analyse ces histogrammes pour améliorer Chrome ! Des millions de mesures chaque jour pour le rendre plus rapide.</div>
-    </div>
-<div class="sc-card" data-cat="perf">
+      <p class="sc-desc">Des <strong>milliers de graphiques</strong> qui mesurent les performances internes depuis le démarrage.</p>
+      <div class="tip-grid"><div class="tip">Des milliers d'histogrammes 📊</div><div class="tip">Filtre dans la barre 🔍</div><div class="tip">Chaque métrique = graphique 📈</div><div class="tip">Données depuis boot</div></div>
+      <div class="sc-fun">🤯 Google et Microsoft analysent ces histogrammes pour améliorer leurs navigateurs. Des millions de mesures chaque jour !</div>
+    </div><div class="sc-card" data-cat="perf" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📈</span>
+        <div class="sc-meta">
+          <div class="sc-title">Histogrammes Perf <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://histograms</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://histograms')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Des <strong>milliers de graphiques</strong> qui mesurent les performances internes depuis le démarrage.</p>
+      <div class="tip-grid"><div class="tip">Des milliers d'histogrammes 📊</div><div class="tip">Filtre dans la barre 🔍</div><div class="tip">Chaque métrique = graphique 📈</div><div class="tip">Données depuis boot</div></div>
+      <div class="sc-fun">🤯 Google et Microsoft analysent ces histogrammes pour améliorer leurs navigateurs. Des millions de mesures chaque jour !</div>
+    </div><div class="sc-card" data-cat="perf" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🔬</span>
         <div class="sc-meta">
@@ -2067,11 +2305,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">L'outil ultime pour voir <strong>exactement ce que Chrome fait</strong> ms par ms. Clique Record et explore !</p>
-      <div class="tip-grid"><div class="tip">Clique Record 🔴</div><div class="tip">Interagis avec Chrome 🖱️</div><div class="tip">Stop pour analyser 🔍</div><div class="tip">Timeline de chaque opération ⏱️</div></div>
-      <div class="sc-fun">🤯 Les ingénieurs Google utilisent cet outil pour trouver pourquoi Chrome est parfois lent. Chaque milliseconde compte !</div>
-    </div>
-<div class="sc-card" data-cat="perf">
+      <p class="sc-desc">L'outil ultime pour voir <strong>exactement ce que le navigateur fait</strong> ms par ms. Clique Record et explore !</p>
+      <div class="tip-grid"><div class="tip">Clique Record 🔴</div><div class="tip">Interagis avec Chrome/Edge 🖱️</div><div class="tip">Stop pour analyser 🔍</div><div class="tip">Timeline de chaque opération ⏱️</div></div>
+      <div class="sc-fun">🤯 Les ingénieurs utilisent cet outil pour trouver pourquoi le navigateur est parfois lent. Chaque milliseconde compte !</div>
+    </div><div class="sc-card" data-cat="perf" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🔬</span>
+        <div class="sc-meta">
+          <div class="sc-title">Traçage Performance <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://tracing</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://tracing')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">L'outil ultime pour voir <strong>exactement ce que le navigateur fait</strong> ms par ms. Clique Record et explore !</p>
+      <div class="tip-grid"><div class="tip">Clique Record 🔴</div><div class="tip">Interagis avec Chrome/Edge 🖱️</div><div class="tip">Stop pour analyser 🔍</div><div class="tip">Timeline de chaque opération ⏱️</div></div>
+      <div class="sc-fun">🤯 Les ingénieurs utilisent cet outil pour trouver pourquoi le navigateur est parfois lent. Chaque milliseconde compte !</div>
+    </div><div class="sc-card" data-cat="perf" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">⚙️</span>
         <div class="sc-meta">
@@ -2082,11 +2333,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">L'arbre complet de tous les <strong>processus Chrome</strong> — navigateur, renderer, GPU, extensions…</p>
+      <p class="sc-desc">L'arbre complet de tous les <strong>processus actifs</strong> — navigateur, renderer, GPU, extensions…</p>
       <div class="tip-grid"><div class="tip">Arbre des processus 🌳</div><div class="tip">Chaque type = rôle différent 🔧</div><div class="tip">Renderer = dessine pages 🎨</div><div class="tip">Browser = gère tout 🧠</div></div>
-      <div class="sc-fun">🤯 Chrome peut avoir 20 à 30 processus séparés ! Si un plante, il n'affecte pas les autres. Robustesse par isolation.</div>
-    </div>
-<div class="sc-card" data-cat="security">
+      <div class="sc-fun">🤯 Le navigateur peut avoir 20 à 30 processus séparés ! Si un plante, il n'affecte pas les autres.</div>
+    </div><div class="sc-card" data-cat="perf" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">⚙️</span>
+        <div class="sc-meta">
+          <div class="sc-title">Processus Internes <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://process-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://process-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">L'arbre complet de tous les <strong>processus actifs</strong> — navigateur, renderer, GPU, extensions…</p>
+      <div class="tip-grid"><div class="tip">Arbre des processus 🌳</div><div class="tip">Chaque type = rôle différent 🔧</div><div class="tip">Renderer = dessine pages 🎨</div><div class="tip">Browser = gère tout 🧠</div></div>
+      <div class="sc-fun">🤯 Le navigateur peut avoir 20 à 30 processus séparés ! Si un plante, il n'affecte pas les autres.</div>
+    </div><div class="sc-card" data-cat="security" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🛡️</span>
         <div class="sc-meta">
@@ -2097,11 +2361,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Chrome vérifie <strong>chaque site visité</strong> pour détecter virus et arnaques. Vois ce gardien invisible au travail !</p>
+      <p class="sc-desc">Le navigateur vérifie <strong>chaque site visité</strong> pour détecter virus et arnaques. Vois ce gardien au travail !</p>
       <div class="tip-grid"><div class="tip">Mise à jour / 30 min ⏰</div><div class="tip">Bloque automatiquement ⛔</div><div class="tip">5 milliards d'appareils 🌍</div><div class="tip">99.9% des malwares bloqués</div></div>
-      <div class="sc-fun">🤯 Google a des robots qui parcourent internet 24h/24 pour trouver les sites dangereux. Des millions analysés chaque jour !</div>
-    </div>
-<div class="sc-card" data-cat="security">
+      <div class="sc-fun">🤯 Google et Microsoft ont des robots qui parcourent internet 24h/24 pour trouver les sites dangereux !</div>
+    </div><div class="sc-card" data-cat="security" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🛡️</span>
+        <div class="sc-meta">
+          <div class="sc-title">Gardien Sécurité <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://safe-browsing</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://safe-browsing')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Le navigateur vérifie <strong>chaque site visité</strong> pour détecter virus et arnaques. Vois ce gardien au travail !</p>
+      <div class="tip-grid"><div class="tip">Mise à jour / 30 min ⏰</div><div class="tip">Bloque automatiquement ⛔</div><div class="tip">5 milliards d'appareils 🌍</div><div class="tip">99.9% des malwares bloqués</div></div>
+      <div class="sc-fun">🤯 Google et Microsoft ont des robots qui parcourent internet 24h/24 pour trouver les sites dangereux !</div>
+    </div><div class="sc-card" data-cat="security" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📦</span>
         <div class="sc-meta">
@@ -2112,11 +2389,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Chrome exécute chaque onglet dans un <strong>'bac à sable'</strong> isolé. Les sites malveillants ne peuvent pas toucher ton ordi !</p>
+      <p class="sc-desc">Chaque onglet s'exécute dans un <strong>'bac à sable'</strong> isolé. Les sites malveillants ne peuvent pas toucher ton ordi !</p>
       <div class="tip-grid"><div class="tip">Sandbox = isolation ✅</div><div class="tip">Statut de protection 🛡️</div><div class="tip">Sandboxed = sécurisé 🔒</div><div class="tip">Révèle ton OS sous-jacent 🖥️</div></div>
       <div class="sc-fun">🤯 Le sandbox est comme un vrai bac à sable — le sable ne sort pas ! Les sites web sont confinés. 🏖️</div>
-    </div>
-<div class="sc-card" data-cat="security">
+    </div><div class="sc-card" data-cat="security" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📦</span>
+        <div class="sc-meta">
+          <div class="sc-title">Sandbox (Bac à Sable) <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://sandbox</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://sandbox')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Chaque onglet s'exécute dans un <strong>'bac à sable'</strong> isolé. Les sites malveillants ne peuvent pas toucher ton ordi !</p>
+      <div class="tip-grid"><div class="tip">Sandbox = isolation ✅</div><div class="tip">Statut de protection 🛡️</div><div class="tip">Sandboxed = sécurisé 🔒</div><div class="tip">Révèle ton OS sous-jacent 🖥️</div></div>
+      <div class="sc-fun">🤯 Le sandbox est comme un vrai bac à sable — le sable ne sort pas ! Les sites web sont confinés. 🏖️</div>
+    </div><div class="sc-card" data-cat="security" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🔑</span>
         <div class="sc-meta">
@@ -2129,24 +2419,50 @@ body {
       </div>
       <p class="sc-desc">Les <strong>journaux internes</strong> du gestionnaire de mots de passe — comment il sauvegarde et remplit automatiquement.</p>
       <div class="tip-grid"><div class="tip">Journaux du gestionnaire 📋</div><div class="tip">Décisions de sauvegarde 💾</div><div class="tip">Erreurs de remplissage 🔧</div><div class="tip">Utile pour déboguer 🕵️</div></div>
-      <div class="sc-fun">🤯 Chrome chiffre tes mots de passe avec AES-256 — le même niveau que les banques ! Il faudrait des milliards d'années pour craquer.</div>
-    </div>
-<div class="sc-card" data-cat="security">
+      <div class="sc-fun">🤯 Le navigateur chiffre tes mots de passe avec AES-256 — le même niveau que les banques ! Impossible à craquer.</div>
+    </div><div class="sc-card" data-cat="security" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🔑</span>
+        <div class="sc-meta">
+          <div class="sc-title">Mots de Passe (Logs) <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://password-manager-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://password-manager-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Les <strong>journaux internes</strong> du gestionnaire de mots de passe — comment il sauvegarde et remplit automatiquement.</p>
+      <div class="tip-grid"><div class="tip">Journaux du gestionnaire 📋</div><div class="tip">Décisions de sauvegarde 💾</div><div class="tip">Erreurs de remplissage 🔧</div><div class="tip">Utile pour déboguer 🕵️</div></div>
+      <div class="sc-fun">🤯 Le navigateur chiffre tes mots de passe avec AES-256 — le même niveau que les banques ! Impossible à craquer.</div>
+    </div><div class="sc-card" data-cat="security" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🏢</span>
         <div class="sc-meta">
-          <div class="sc-title">Politiques Entreprise <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-title">Politiques Admin <span class="lv-badge lv-med">🔬 Moyen</span></div>
           <div class="sc-url-row">
             <span class="sc-url-txt">chrome://policy</span>
             <button class="sc-copy-btn" onclick="copySecret(this,'chrome://policy')" title="Copier l'URL">📋</button>
           </div>
         </div>
       </div>
-      <p class="sc-desc">Si tu utilises Chrome à l'école ou au boulot, des <strong>règles admin</strong> peuvent être actives. Vois-les toutes !</p>
+      <p class="sc-desc">Si tu utilises ce navigateur à l'école ou au boulot, des <strong>règles admin</strong> peuvent être actives. Vois-les toutes !</p>
       <div class="tip-grid"><div class="tip">Vide = pas de restrictions 🆓</div><div class="tip">École/boulot = règles 🏫</div><div class="tip">ExtensionInstallForce 🧩</div><div class="tip">Impossible à contourner 🚫</div></div>
-      <div class="sc-fun">🤯 Les admins IT peuvent bloquer n'importe quelle fonctionnalité de Chrome à distance ! Ton prof a peut-être des superpouvoirs Chrome... 🤫</div>
-    </div>
-<div class="sc-card" data-cat="data">
+      <div class="sc-fun">🤯 Les admins IT peuvent bloquer n'importe quelle fonctionnalité à distance ! Ton prof a peut-être des superpouvoirs... 🤫</div>
+    </div><div class="sc-card" data-cat="security" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🏢</span>
+        <div class="sc-meta">
+          <div class="sc-title">Politiques Admin <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://policy</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://policy')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Si tu utilises ce navigateur à l'école ou au boulot, des <strong>règles admin</strong> peuvent être actives. Vois-les toutes !</p>
+      <div class="tip-grid"><div class="tip">Vide = pas de restrictions 🆓</div><div class="tip">École/boulot = règles 🏫</div><div class="tip">ExtensionInstallForce 🧩</div><div class="tip">Impossible à contourner 🚫</div></div>
+      <div class="sc-fun">🤯 Les admins IT peuvent bloquer n'importe quelle fonctionnalité à distance ! Ton prof a peut-être des superpouvoirs... 🤫</div>
+    </div><div class="sc-card" data-cat="data" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">💿</span>
         <div class="sc-meta">
@@ -2160,8 +2476,21 @@ body {
       <p class="sc-desc">Chaque site peut stocker des données sur ton ordi. Vois <strong>qui stocke quoi</strong> et combien d'espace !</p>
       <div class="tip-grid"><div class="tip">Espace par site 💾</div><div class="tip">IndexedDB, Cache, etc. 📦</div><div class="tip">Sites les plus gourmands 🐘</div><div class="tip">Vider le stockage 🗑️</div></div>
       <div class="sc-fun">🤯 YouTube peut stocker 50 Mo sur ton ordi pour le cache vidéo ! C'est pour que les vidéos se rechargent plus vite.</div>
-    </div>
-<div class="sc-card" data-cat="data">
+    </div><div class="sc-card" data-cat="data" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">💿</span>
+        <div class="sc-meta">
+          <div class="sc-title">Quotas Stockage <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://quota-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://quota-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Chaque site peut stocker des données sur ton ordi. Vois <strong>qui stocke quoi</strong> et combien d'espace !</p>
+      <div class="tip-grid"><div class="tip">Espace par site 💾</div><div class="tip">IndexedDB, Cache, etc. 📦</div><div class="tip">Sites les plus gourmands 🐘</div><div class="tip">Vider le stockage 🗑️</div></div>
+      <div class="sc-fun">🤯 YouTube peut stocker 50 Mo sur ton ordi pour le cache vidéo ! C'est pour que les vidéos se rechargent plus vite.</div>
+    </div><div class="sc-card" data-cat="data" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🗄️</span>
         <div class="sc-meta">
@@ -2175,8 +2504,21 @@ body {
       <p class="sc-desc">Les sites modernes ont leur propre <strong>mini-base de données</strong> sur ton ordi ! Vois toutes ces BDD cachées.</p>
       <div class="tip-grid"><div class="tip">BDD locale par site 🏗️</div><div class="tip">Stockage hors connexion 📴</div><div class="tip">Gmail draft offline ✉️</div><div class="tip">Plus puissant que cookies</div></div>
       <div class="sc-fun">🤯 Gmail stocke tes brouillons directement sur ton ordi ! Si tu perds internet, ton texte est sauvé. ✉️</div>
-    </div>
-<div class="sc-card" data-cat="data">
+    </div><div class="sc-card" data-cat="data" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🗄️</span>
+        <div class="sc-meta">
+          <div class="sc-title">Base de Données (IndexedDB) <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://indexeddb-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://indexeddb-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Les sites modernes ont leur propre <strong>mini-base de données</strong> sur ton ordi ! Vois toutes ces BDD cachées.</p>
+      <div class="tip-grid"><div class="tip">BDD locale par site 🏗️</div><div class="tip">Stockage hors connexion 📴</div><div class="tip">Gmail draft offline ✉️</div><div class="tip">Plus puissant que cookies</div></div>
+      <div class="sc-fun">🤯 Gmail stocke tes brouillons directement sur ton ordi ! Si tu perds internet, ton texte est sauvé. ✉️</div>
+    </div><div class="sc-card" data-cat="data" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">⚡</span>
         <div class="sc-meta">
@@ -2190,8 +2532,21 @@ body {
       <p class="sc-desc">Des <strong>mini-programmes invisibles</strong> installés par des sites qui tournent en arrière-plan, même onglet fermé !</p>
       <div class="tip-grid"><div class="tip">Tournent sans onglet ouvert 👻</div><div class="tip">Notifications push 🔔</div><div class="tip">Apps hors connexion 📴</div><div class="tip">Chaque site installe le sien</div></div>
       <div class="sc-fun">🤯 Les Service Workers permettent à Twitter de t'envoyer des notifications même onglet fermé. Magique ! ✨</div>
-    </div>
-<div class="sc-card" data-cat="data">
+    </div><div class="sc-card" data-cat="data" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">⚡</span>
+        <div class="sc-meta">
+          <div class="sc-title">Service Workers <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://serviceworker-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://serviceworker-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Des <strong>mini-programmes invisibles</strong> installés par des sites qui tournent en arrière-plan, même onglet fermé !</p>
+      <div class="tip-grid"><div class="tip">Tournent sans onglet ouvert 👻</div><div class="tip">Notifications push 🔔</div><div class="tip">Apps hors connexion 📴</div><div class="tip">Chaque site installe le sien</div></div>
+      <div class="sc-fun">🤯 Les Service Workers permettent à Twitter de t'envoyer des notifications même onglet fermé. Magique ! ✨</div>
+    </div><div class="sc-card" data-cat="data" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📊</span>
         <div class="sc-meta">
@@ -2202,11 +2557,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Chrome <strong>mesure ton engagement</strong> avec chaque site ! Plus tu visites souvent, plus ton score est élevé.</p>
-      <div class="tip-grid"><div class="tip">Score par site 0-100 📊</div><div class="tip">YouTube/Google en haut 🏆</div><div class="tip">Score baisse si arrêtes 📉</div><div class="tip">Affecte suggestions Chrome 💡</div></div>
-      <div class="sc-fun">🤯 Chrome utilise ce score pour décider quels sites suggérer dans l'omnibox. Plus tu visites = plus 'important' !</div>
-    </div>
-<div class="sc-card" data-cat="sync">
+      <p class="sc-desc">Le navigateur <strong>mesure ton engagement</strong> avec chaque site ! Plus tu visites souvent, plus ton score est élevé.</p>
+      <div class="tip-grid"><div class="tip">Score par site 0-100 📊</div><div class="tip">YouTube/Google en haut 🏆</div><div class="tip">Score baisse si arrêtes 📉</div><div class="tip">Affecte suggestions 💡</div></div>
+      <div class="sc-fun">🤯 Le navigateur utilise ce score pour décider quels sites suggérer dans la barre d'adresse. Plus tu visites = plus 'important' !</div>
+    </div><div class="sc-card" data-cat="data" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📊</span>
+        <div class="sc-meta">
+          <div class="sc-title">Engagement Sites <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://site-engagement</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://site-engagement')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Le navigateur <strong>mesure ton engagement</strong> avec chaque site ! Plus tu visites souvent, plus ton score est élevé.</p>
+      <div class="tip-grid"><div class="tip">Score par site 0-100 📊</div><div class="tip">YouTube/Google en haut 🏆</div><div class="tip">Score baisse si arrêtes 📉</div><div class="tip">Affecte suggestions 💡</div></div>
+      <div class="sc-fun">🤯 Le navigateur utilise ce score pour décider quels sites suggérer dans la barre d'adresse. Plus tu visites = plus 'important' !</div>
+    </div><div class="sc-card" data-cat="sync" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🔄</span>
         <div class="sc-meta">
@@ -2219,24 +2587,50 @@ body {
       </div>
       <p class="sc-desc">Tes données sont <strong>synchronisées</strong> sur tous tes appareils. Vois comment ça fonctionne en direct !</p>
       <div class="tip-grid"><div class="tip">Favoris, mots de passe, onglets 📚</div><div class="tip">Stats sync en direct ⚡</div><div class="tip">Dernière sync horodatée 🕐</div><div class="tip">Debug si sync bug 🔧</div></div>
-      <div class="sc-fun">🤯 En 2024, Chrome synchronise les données de 3 milliards d'utilisateurs ! Un changement sur PC apparaît sur téléphone en secondes.</div>
-    </div>
-<div class="sc-card" data-cat="sync">
+      <div class="sc-fun">🤯 Chrome synchronise 3 milliards d'utilisateurs ! Un changement sur PC apparaît sur téléphone en quelques secondes.</div>
+    </div><div class="sc-card" data-cat="sync" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🔄</span>
+        <div class="sc-meta">
+          <div class="sc-title">Synchronisation <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://sync-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://sync-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Tes données sont <strong>synchronisées</strong> sur tous tes appareils. Vois comment ça fonctionne en direct !</p>
+      <div class="tip-grid"><div class="tip">Favoris, mots de passe, onglets 📚</div><div class="tip">Stats sync en direct ⚡</div><div class="tip">Dernière sync horodatée 🕐</div><div class="tip">Debug si sync bug 🔧</div></div>
+      <div class="sc-fun">🤯 Chrome synchronise 3 milliards d'utilisateurs ! Un changement sur PC apparaît sur téléphone en quelques secondes.</div>
+    </div><div class="sc-card" data-cat="sync" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">👤</span>
         <div class="sc-meta">
-          <div class="sc-title">Connexion Google <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-title">Connexion Compte <span class="lv-badge lv-med">🔬 Moyen</span></div>
           <div class="sc-url-row">
             <span class="sc-url-txt">chrome://signin-internals</span>
             <button class="sc-copy-btn" onclick="copySecret(this,'chrome://signin-internals')" title="Copier l'URL">📋</button>
           </div>
         </div>
       </div>
-      <p class="sc-desc">Tous les <strong>détails de ta connexion</strong> Google — tokens, état du compte, timestamp de connexion…</p>
+      <p class="sc-desc">Tous les <strong>détails de ta connexion</strong> — tokens, état du compte, timestamp de connexion…</p>
       <div class="tip-grid"><div class="tip">Tokens de connexion 🔑</div><div class="tip">État du compte 👤</div><div class="tip">Timestamps 🕐</div><div class="tip">Erreurs de connexion 🔴</div></div>
-      <div class="sc-fun">🤯 Chrome utilise des 'tokens' (jetons numériques) pour te garder connecté sans retaper ton mot de passe. Chaque token expire automatiquement !</div>
-    </div>
-<div class="sc-card" data-cat="tools">
+      <div class="sc-fun">🤯 Le navigateur utilise des 'tokens' pour te garder connecté sans retaper ton mot de passe. Chaque token expire automatiquement !</div>
+    </div><div class="sc-card" data-cat="sync" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">👤</span>
+        <div class="sc-meta">
+          <div class="sc-title">Connexion Compte <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://signin-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://signin-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Tous les <strong>détails de ta connexion</strong> — tokens, état du compte, timestamp de connexion…</p>
+      <div class="tip-grid"><div class="tip">Tokens de connexion 🔑</div><div class="tip">État du compte 👤</div><div class="tip">Timestamps 🕐</div><div class="tip">Erreurs de connexion 🔴</div></div>
+      <div class="sc-fun">🤯 Le navigateur utilise des 'tokens' pour te garder connecté sans retaper ton mot de passe. Chaque token expire automatiquement !</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">♿</span>
         <div class="sc-meta">
@@ -2247,11 +2641,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Chrome construit un <strong>arbre invisible</strong> de chaque page pour aider les personnes malvoyantes. Vois cet arbre !</p>
+      <p class="sc-desc">Le navigateur construit un <strong>arbre invisible</strong> de chaque page pour aider les personnes malvoyantes.</p>
       <div class="tip-grid"><div class="tip">Arbre d'accessibilité 🌳</div><div class="tip">Pour lecteurs d'écran 👂</div><div class="tip">Rôles et propriétés ARIA 📋</div><div class="tip">Monitoring en direct</div></div>
-      <div class="sc-fun">🤯 Les personnes malvoyantes utilisent des lecteurs d'écran qui lisent cet arbre à voix haute. Chrome le génère pour chaque page !</div>
-    </div>
-<div class="sc-card" data-cat="tools">
+      <div class="sc-fun">🤯 Les personnes malvoyantes utilisent des lecteurs d'écran qui lisent cet arbre à voix haute. Généré pour chaque page !</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">♿</span>
+        <div class="sc-meta">
+          <div class="sc-title">Accessibilité (A11Y) <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://accessibility</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://accessibility')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Le navigateur construit un <strong>arbre invisible</strong> de chaque page pour aider les personnes malvoyantes.</p>
+      <div class="tip-grid"><div class="tip">Arbre d'accessibilité 🌳</div><div class="tip">Pour lecteurs d'écran 👂</div><div class="tip">Rôles et propriétés ARIA 📋</div><div class="tip">Monitoring en direct</div></div>
+      <div class="sc-fun">🤯 Les personnes malvoyantes utilisent des lecteurs d'écran qui lisent cet arbre à voix haute. Généré pour chaque page !</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🔤</span>
         <div class="sc-meta">
@@ -2262,11 +2669,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Les <strong>coulisses de la traduction</strong> automatique — comment Chrome détecte la langue et traduit les pages.</p>
+      <p class="sc-desc">Les <strong>coulisses de la traduction</strong> automatique — comment il détecte la langue et traduit les pages.</p>
       <div class="tip-grid"><div class="tip">Langue détectée par IA 🤖</div><div class="tip">Stats de traduction 📊</div><div class="tip">Pages récemment traduites 🌐</div><div class="tip">Historique des décisions</div></div>
-      <div class="sc-fun">🤯 Chrome peut détecter la langue d'une page en analysant seulement quelques mots ! Modèle de machine learning. 🧠</div>
-    </div>
-<div class="sc-card" data-cat="tools">
+      <div class="sc-fun">🤯 Le navigateur peut détecter la langue d'une page en analysant seulement quelques mots ! Machine learning. 🧠</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🔤</span>
+        <div class="sc-meta">
+          <div class="sc-title">Traduction Auto <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://translate-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://translate-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Les <strong>coulisses de la traduction</strong> automatique — comment il détecte la langue et traduit les pages.</p>
+      <div class="tip-grid"><div class="tip">Langue détectée par IA 🤖</div><div class="tip">Stats de traduction 📊</div><div class="tip">Pages récemment traduites 🌐</div><div class="tip">Historique des décisions</div></div>
+      <div class="sc-fun">🤯 Le navigateur peut détecter la langue d'une page en analysant seulement quelques mots ! Machine learning. 🧠</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🎯</span>
         <div class="sc-meta">
@@ -2277,11 +2697,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Chrome <strong>prédit</strong> ce que tu vas taper dans la barre d'adresse. Vois comment il apprend de tes habitudes !</p>
-      <div class="tip-grid"><div class="tip">Historique des saisies 📝</div><div class="tip">Probabilités 📊</div><div class="tip">Chrome apprend de toi 🧠</div><div class="tip">Plus utilisé = plus précis</div></div>
-      <div class="sc-fun">🤯 Chrome peut prédire avec 90% de précision ce que tu vas taper ensuite. Il analyse tes habitudes de navigation !</div>
-    </div>
-<div class="sc-card" data-cat="tools">
+      <p class="sc-desc">Le navigateur <strong>prédit</strong> ce que tu vas taper dans la barre d'adresse. Il apprend de tes habitudes !</p>
+      <div class="tip-grid"><div class="tip">Historique des saisies 📝</div><div class="tip">Probabilités 📊</div><div class="tip">Apprend de toi 🧠</div><div class="tip">Plus utilisé = plus précis</div></div>
+      <div class="sc-fun">🤯 Le navigateur peut prédire avec 90% de précision ce que tu vas taper ensuite. Il analyse tes habitudes !</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🎯</span>
+        <div class="sc-meta">
+          <div class="sc-title">Prédictions Omnibox <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://predictors</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://predictors')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Le navigateur <strong>prédit</strong> ce que tu vas taper dans la barre d'adresse. Il apprend de tes habitudes !</p>
+      <div class="tip-grid"><div class="tip">Historique des saisies 📝</div><div class="tip">Probabilités 📊</div><div class="tip">Apprend de toi 🧠</div><div class="tip">Plus utilisé = plus précis</div></div>
+      <div class="sc-fun">🤯 Le navigateur peut prédire avec 90% de précision ce que tu vas taper ensuite. Il analyse tes habitudes !</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">💡</span>
         <div class="sc-meta">
@@ -2292,11 +2725,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Les <strong>sites suggérés</strong> sur la page de nouvel onglet viennent de là ! Vois comment Chrome choisit.</p>
+      <p class="sc-desc">Les <strong>sites suggérés</strong> sur la page de nouvel onglet viennent de là ! Vois comment le navigateur choisit.</p>
       <div class="tip-grid"><div class="tip">Tuiles page d'accueil 🏠</div><div class="tip">Triés par pertinence 🎯</div><div class="tip">Scores de suggestion 📊</div><div class="tip">Mis à jour auto 🔄</div></div>
       <div class="sc-fun">🤯 La page de nouvel onglet génère des suggestions personnalisées en quelques millisecondes — entièrement local !</div>
-    </div>
-<div class="sc-card" data-cat="tools">
+    </div><div class="sc-card" data-cat="tools" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">💡</span>
+        <div class="sc-meta">
+          <div class="sc-title">Suggestions Contenu <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://suggestions</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://suggestions')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Les <strong>sites suggérés</strong> sur la page de nouvel onglet viennent de là ! Vois comment le navigateur choisit.</p>
+      <div class="tip-grid"><div class="tip">Tuiles page d'accueil 🏠</div><div class="tip">Triés par pertinence 🎯</div><div class="tip">Scores de suggestion 📊</div><div class="tip">Mis à jour auto 🔄</div></div>
+      <div class="sc-fun">🤯 La page de nouvel onglet génère des suggestions personnalisées en quelques millisecondes — entièrement local !</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">🖥️</span>
         <div class="sc-meta">
@@ -2307,11 +2753,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Chrome peut accéder aux <strong>appareils USB</strong> connectés via des sites web (WebUSB). Vois les accès accordés !</p>
+      <p class="sc-desc">Le navigateur peut accéder aux <strong>appareils USB</strong> via des sites web (WebUSB). Vois les accès accordés !</p>
       <div class="tip-grid"><div class="tip">Appareils USB autorisés 🔌</div><div class="tip">Sites avec accès WebUSB 🌐</div><div class="tip">Révoquer permissions 🚫</div><div class="tip">Technologie futuriste 🚀</div></div>
-      <div class="sc-fun">🤯 Avec WebUSB, un site peut contrôler une imprimante 3D ou un Arduino depuis Chrome — sans logiciel installé ! 🤯</div>
-    </div>
-<div class="sc-card" data-cat="tools">
+      <div class="sc-fun">🤯 Avec WebUSB, un site peut contrôler une imprimante 3D ou un Arduino depuis le navigateur — sans logiciel installé ! 🤯</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🖥️</span>
+        <div class="sc-meta">
+          <div class="sc-title">Appareils USB <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://usb-internals</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://usb-internals')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Le navigateur peut accéder aux <strong>appareils USB</strong> via des sites web (WebUSB). Vois les accès accordés !</p>
+      <div class="tip-grid"><div class="tip">Appareils USB autorisés 🔌</div><div class="tip">Sites avec accès WebUSB 🌐</div><div class="tip">Révoquer permissions 🚫</div><div class="tip">Technologie futuriste 🚀</div></div>
+      <div class="sc-fun">🤯 Avec WebUSB, un site peut contrôler une imprimante 3D ou un Arduino depuis le navigateur — sans logiciel installé ! 🤯</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📱</span>
         <div class="sc-meta">
@@ -2322,11 +2781,24 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Vois les <strong>appareils Google</strong> liés à ton compte — téléphone, Chromebook… Chrome les connaît tous !</p>
+      <p class="sc-desc">Vois les <strong>appareils liés</strong> à ton compte — téléphone, tablette… Le navigateur les connaît tous !</p>
       <div class="tip-grid"><div class="tip">Appareils liés 📱</div><div class="tip">Envoie onglets vers téléphone 📲</div><div class="tip">Cast & partage réseau 📡</div><div class="tip">Sync multi-appareils !</div></div>
-      <div class="sc-fun">🤯 Tu peux envoyer un onglet de ton PC vers ton téléphone en un clic ! La page s'ouvre automatiquement. Téléportation ! 🌀</div>
-    </div>
-<div class="sc-card" data-cat="tools">
+      <div class="sc-fun">🤯 Tu peux envoyer un onglet de ton PC vers ton téléphone en un clic ! La page s'ouvre automatiquement. 🌀</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📱</span>
+        <div class="sc-meta">
+          <div class="sc-title">Appareils Proches <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://devices</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://devices')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Vois les <strong>appareils liés</strong> à ton compte — téléphone, tablette… Le navigateur les connaît tous !</p>
+      <div class="tip-grid"><div class="tip">Appareils liés 📱</div><div class="tip">Envoie onglets vers téléphone 📲</div><div class="tip">Cast & partage réseau 📡</div><div class="tip">Sync multi-appareils !</div></div>
+      <div class="sc-fun">🤯 Tu peux envoyer un onglet de ton PC vers ton téléphone en un clic ! La page s'ouvre automatiquement. 🌀</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📊</span>
         <div class="sc-meta">
@@ -2337,15 +2809,28 @@ body {
           </div>
         </div>
       </div>
-      <p class="sc-desc">Un <strong>flux en temps réel</strong> de chaque action dans Chrome — clics, navigation, scroll… Regarde pendant que tu navigues !</p>
-      <div class="tip-grid"><div class="tip">Stream en temps réel ⚡</div><div class="tip">Chaque clic = événement 🖱️</div><div class="tip">Nommage technique Google 🔤</div><div class="tip">Fascinant à regarder !</div></div>
-      <div class="sc-fun">🤯 Google utilise ces données agrégées pour comprendre comment les gens utilisent Chrome. Chaque clic contribue à Chrome 4.0 !</div>
-    </div>
-<div class="sc-card" data-cat="tools">
+      <p class="sc-desc">Un <strong>flux en temps réel</strong> de chaque action dans le navigateur — clics, navigation, scroll…</p>
+      <div class="tip-grid"><div class="tip">Stream en temps réel ⚡</div><div class="tip">Chaque clic = événement 🖱️</div><div class="tip">Nommage technique 🔤</div><div class="tip">Fascinant à regarder !</div></div>
+      <div class="sc-fun">🤯 Google et Microsoft utilisent ces données agrégées pour comprendre comment les gens utilisent leur navigateur.</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📊</span>
+        <div class="sc-meta">
+          <div class="sc-title">Actions Utilisateur <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://user-actions</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://user-actions')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Un <strong>flux en temps réel</strong> de chaque action dans le navigateur — clics, navigation, scroll…</p>
+      <div class="tip-grid"><div class="tip">Stream en temps réel ⚡</div><div class="tip">Chaque clic = événement 🖱️</div><div class="tip">Nommage technique 🔤</div><div class="tip">Fascinant à regarder !</div></div>
+      <div class="sc-fun">🤯 Google et Microsoft utilisent ces données agrégées pour comprendre comment les gens utilisent leur navigateur.</div>
+    </div><div class="sc-card" data-cat="tools" data-browser="chrome">
       <div class="sc-top">
         <span class="sc-emoji">📲</span>
         <div class="sc-meta">
-          <div class="sc-title">Cast (Chromecast) <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-title">Cast (TV) <span class="lv-badge lv-easy">⭐ Facile</span></div>
           <div class="sc-url-row">
             <span class="sc-url-txt">chrome://cast</span>
             <button class="sc-copy-btn" onclick="copySecret(this,'chrome://cast')" title="Copier l'URL">📋</button>
@@ -2353,42 +2838,95 @@ body {
         </div>
       </div>
       <p class="sc-desc">Envoie ce que tu vois vers un <strong>Chromecast ou TV</strong>. Vois les appareils Cast sur ton réseau !</p>
-      <div class="tip-grid"><div class="tip">Chromecast même WiFi 📡</div><div class="tip">Cast onglet ou bureau 🖥️</div><div class="tip">Miroir d'écran 🪞</div><div class="tip">Fonctionne avec Sony/Samsung !</div></div>
+      <div class="tip-grid"><div class="tip">Même WiFi 📡</div><div class="tip">Cast onglet ou bureau 🖥️</div><div class="tip">Miroir d'écran 🪞</div><div class="tip">Fonctionne avec Sony/Samsung !</div></div>
       <div class="sc-fun">🤯 Chromecast a été lancé en 2013 à 35$. Il a révolutionné le streaming TV — plus de 30 millions d'unités en 2 ans !</div>
-    </div>
-<div class="sc-card" data-cat="tools">
+    </div><div class="sc-card" data-cat="tools" data-browser="edge">
       <div class="sc-top">
-        <span class="sc-emoji">🔔</span>
+        <span class="sc-emoji">📲</span>
         <div class="sc-meta">
-          <div class="sc-title">Invalidations Sync <span class="lv-badge lv-wow">🤩 Wow !</span></div>
+          <div class="sc-title">Cast (TV) <span class="lv-badge lv-easy">⭐ Facile</span></div>
           <div class="sc-url-row">
-            <span class="sc-url-txt">chrome://invalidations</span>
-            <button class="sc-copy-btn" onclick="copySecret(this,'chrome://invalidations')" title="Copier l'URL">📋</button>
+            <span class="sc-url-txt">edge://cast</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://cast')" title="Copier l'URL">📋</button>
           </div>
         </div>
       </div>
-      <p class="sc-desc">Quand tes données changent ailleurs, Google envoie un <strong>'invalidation'</strong> pour dire à Chrome de re-synchroniser.</p>
-      <div class="tip-grid"><div class="tip">Messages de sync live 📡</div><div class="tip">Type et timestamp 🕐</div><div class="tip">Favoris, mots de passe… 📚</div><div class="tip">Infrastructure mondiale !</div></div>
-      <div class="sc-fun">🤯 Google maintient une infra mondiale pour synchroniser Chrome sur des milliards d'appareils. Chaque changement prend < 1 seconde !</div>
-    </div>
-
+      <p class="sc-desc">Envoie ce que tu vois vers un <strong>Chromecast ou TV</strong>. Vois les appareils Cast sur ton réseau !</p>
+      <div class="tip-grid"><div class="tip">Même WiFi 📡</div><div class="tip">Cast onglet ou bureau 🖥️</div><div class="tip">Miroir d'écran 🪞</div><div class="tip">Fonctionne avec Sony/Samsung !</div></div>
+      <div class="sc-fun">🤯 Chromecast a été lancé en 2013 à 35$. Il a révolutionné le streaming TV — plus de 30 millions d'unités en 2 ans !</div>
+    </div><div class="sc-card" data-cat="edge_only" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">💰</span>
+        <div class="sc-meta">
+          <div class="sc-title">Microsoft Rewards <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://rewards</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://rewards')" title="Copier l'URL">📋</button>
           </div>
-
-        </div><!-- /cs-scroll -->
-      </div><!-- /cs-main -->
-    </div><!-- /cs-body -->
+        </div>
+      </div>
+      <p class="sc-desc">Edge te donne des <strong>points Microsoft Rewards</strong> quand tu navigues ! Cette page montre ton solde et tes récompenses.</p>
+      <div class="tip-grid"><div class="tip">Points en naviguant 💰</div><div class="tip">Échangeables contre cadeaux 🎁</div><div class="tip">Exclusif à Edge 🔵</div><div class="tip">Connecte ton compte Microsoft !</div></div>
+      <div class="sc-fun">🤯 Microsoft paie littéralement les gens pour utiliser Edge ! Tu peux gagner des cartes cadeaux Xbox, Amazon et plus encore.</div>
+    </div><div class="sc-card" data-cat="edge_only" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">🛍️</span>
+        <div class="sc-meta">
+          <div class="sc-title">Assistant Shopping <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://shopping</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://shopping')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Edge a un <strong>assistant shopping intégré</strong> qui cherche automatiquement des codes promo quand tu fais des achats !</p>
+      <div class="tip-grid"><div class="tip">Codes promo automatiques 🏷️</div><div class="tip">Comparaison de prix 💲</div><div class="tip">Historique des prix 📈</div><div class="tip">Exclusif Edge 🔵</div></div>
+      <div class="sc-fun">🤯 Edge peut te faire économiser de l'argent automatiquement ! Il compare les prix sur des milliers de sites en temps réel.</div>
+    </div><div class="sc-card" data-cat="edge_only" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">📋</span>
+        <div class="sc-meta">
+          <div class="sc-title">Collections <span class="lv-badge lv-easy">⭐ Facile</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://collections</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://collections')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Les <strong>Collections Edge</strong> permettent de sauvegarder des pages web dans des dossiers organisés. Comme un carnet de notes !</p>
+      <div class="tip-grid"><div class="tip">Organise tes pages web 📂</div><div class="tip">Ajoute des notes 📝</div><div class="tip">Synchronisé sur tes appareils 🔄</div><div class="tip">Exclusif Edge 🔵</div></div>
+      <div class="sc-fun">🤯 Collections est une des fonctions les plus aimées d'Edge ! Les chercheurs et étudiants s'en servent pour organiser leurs recherches.</div>
+    </div><div class="sc-card" data-cat="edge_only" data-browser="edge">
+      <div class="sc-top">
+        <span class="sc-emoji">⚡</span>
+        <div class="sc-meta">
+          <div class="sc-title">Mode Performance <span class="lv-badge lv-med">🔬 Moyen</span></div>
+          <div class="sc-url-row">
+            <span class="sc-url-txt">edge://performance</span>
+            <button class="sc-copy-btn" onclick="copySecret(this,'edge://performance')" title="Copier l'URL">📋</button>
+          </div>
+        </div>
+      </div>
+      <p class="sc-desc">Edge a un <strong>mode d'économie d'énergie</strong> qui réduit la consommation de batterie. Vois ici comment il fonctionne !</p>
+      <div class="tip-grid"><div class="tip">Mode économie batterie 🔋</div><div class="tip">Limite l'utilisation CPU ⚙️</div><div class="tip">Idéal pour portable 💻</div><div class="tip">Exclusif Edge 🔵</div></div>
+      <div class="sc-fun">🤯 Edge consomme en moyenne 30% moins de batterie que Chrome grâce à ce mode. Microsoft a beaucoup travaillé là-dessus !</div>
+    </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <footer class="app-footer">
       <span class="footer-text">powered by <a href="https://workshop-diy.org" target="_blank" rel="noopener">workshop-diy.org</a></span>
       <span class="hijri-date" id="hijriDate"></span>
     </footer>
     <div class="deco-band bottom-band" aria-hidden="true"></div>
-  </div><!-- /app -->
+  </div>
 
   <canvas id="matrixCanvas" class="matrix-canvas"></canvas>
   <div id="debugPanel" class="debug-panel"><span id="debugFps">0 FPS</span><span id="debugMem">0 MB</span></div>
 
-  <!-- HELP PANEL -->
+  <!-- HELP -->
   <div class="sidebar-overlay" id="helpOverlay"></div>
   <aside class="sidebar sidebar-left" id="helpPanel" aria-label="Help" role="dialog" aria-modal="true">
     <div class="sidebar-header">
@@ -2402,28 +2940,28 @@ body {
     </div>
     <div class="sidebar-body">
       <div class="help-content active" id="helpFaq">
-        <details class="help-item"><summary>C'est quoi chrome:// ?</summary><p>Des adresses spéciales que Chrome comprend. Tape-les dans la barre d'adresse — elles ouvrent des pages secrètes internes !</p></details>
-        <details class="help-item"><summary>Le bouton URL fait quoi ?</summary><p>Clique 📋 → l'URL est <strong>copiée</strong> dans le presse-papier. Ensuite colle-la dans Chrome avec <kbd>Ctrl+L</kbd> puis <kbd>Ctrl+V</kbd> !</p></details>
-        <details class="help-item"><summary>Comment ouvrir l'URL copiée ?</summary><p>Clique sur la barre d'adresse Chrome (<kbd>Ctrl+L</kbd>), colle avec <kbd>Ctrl+V</kbd>, et appuie sur <kbd>Entrée</kbd>. Les adresses chrome:// ne peuvent pas s'ouvrir automatiquement depuis une page web — c'est voulu par Google pour la sécurité !</p></details>
-        <details class="help-item"><summary>C'est dangereux ?</summary><p>Non ! Regarder est toujours sans danger. Pour les flags ou réglages, demande à un adulte avant de changer quoi que ce soit.</p></details>
+        <details class="help-item"><summary>Chrome vs Edge — quelle différence ?</summary><p>Chrome utilise <strong>chrome://</strong> et Edge utilise <strong>edge://</strong>. Beaucoup de pages sont identiques car les deux sont basés sur Chromium ! Edge a en plus des exclusifs : Surf, Rewards, Shopping, Collections.</p></details>
+        <details class="help-item"><summary>Comment ouvrir une URL secrète ?</summary><p>Clique 📋 pour copier. Puis dans ton navigateur : <kbd>Ctrl+L</kbd> → <kbd>Ctrl+V</kbd> → <kbd>Entrée</kbd>.</p></details>
+        <details class="help-item"><summary>Pourquoi ça ne s'ouvre pas tout seul ?</summary><p>Les adresses <strong>chrome://</strong> et <strong>edge://</strong> ne peuvent pas être ouvertes depuis une page web — règle de sécurité Google et Microsoft.</p></details>
+        <details class="help-item"><summary>C'est dangereux ?</summary><p>Non ! Regarder est toujours sans danger. Pour les flags ou réglages, demande à un adulte.</p></details>
       </div>
       <div class="help-content" id="helpHowto">
-        <div class="help-step"><span class="help-step-num">1</span><p>Ouvre <strong>Google Chrome</strong>.</p></div>
-        <div class="help-step"><span class="help-step-num">2</span><p>Choisis une catégorie dans le <strong>menu gauche</strong>.</p></div>
-        <div class="help-step"><span class="help-step-num">3</span><p>Clique 📋 pour <strong>copier</strong> l'URL, puis colle-la dans Chrome (<kbd>Ctrl+L</kbd> + <kbd>Ctrl+V</kbd>).</p></div>
-        <div class="help-step"><span class="help-step-num">4</span><p>Le compteur <strong>Explorés</strong> s'incrémente. Peux-tu tous les faire ? 🏆</p></div>
+        <div class="help-step"><span class="help-step-num">1</span><p>Choisis ton navigateur en haut : <strong>🟢 Chrome</strong> ou <strong>🔵 Edge</strong>.</p></div>
+        <div class="help-step"><span class="help-step-num">2</span><p>Filtre par catégorie dans le <strong>menu gauche</strong>.</p></div>
+        <div class="help-step"><span class="help-step-num">3</span><p>Clique <strong>📋</strong> sur un secret pour copier l'URL.</p></div>
+        <div class="help-step"><span class="help-step-num">4</span><p>Colle dans ton navigateur : <kbd>Ctrl+L</kbd> → <kbd>Ctrl+V</kbd> → <kbd>Entrée</kbd> !</p></div>
       </div>
       <div class="help-content" id="helpWiki">
-        <div class="wiki-entry"><h3>🎨 8 Thèmes</h3><p>Space (défaut), Mosque Gold, Zellige, Andalus, Riad, Medina, Jungle, Robot.</p></div>
+        <div class="wiki-entry"><h3>🟢 Chrome</h3><p>Utilise les adresses <code>chrome://</code>. Navigateur Google, le plus utilisé au monde avec plus de 3 milliards d'utilisateurs.</p></div>
+        <div class="wiki-entry"><h3>🔵 Edge</h3><p>Utilise les adresses <code>edge://</code>. Navigateur Microsoft basé sur Chromium depuis 2020. A des exclusifs : Surf 🏄, Rewards 💰, Shopping 🛍️, Collections 📋.</p></div>
         <div class="wiki-entry"><h3>⭐ Niveaux</h3><p>⭐ Facile · 🔬 Moyen · 🤩 Wow !</p></div>
-        <div class="wiki-entry"><h3>🌐 3 Langues</h3><p>FR · EN · العربية (RTL automatique)</p></div>
-        <div class="wiki-entry"><h3>🔒 Confidentialité</h3><p>Tout fonctionne localement. Aucune donnée envoyée.</p></div>
+        <div class="wiki-entry"><h3>🎨 8 Thèmes</h3><p>Space, Mosque Gold, Zellige, Andalus, Riad, Medina, Jungle, Robot.</p></div>
       </div>
     </div>
     <div class="sidebar-footer"><span>Workshop DIY</span><span class="badge"><strong>v1.2</strong></span></div>
   </aside>
 
-  <!-- SETTINGS PANEL -->
+  <!-- SETTINGS -->
   <div class="sidebar-overlay" id="settingsOverlay"></div>
   <aside class="sidebar" id="settingsPanel" aria-label="Settings" role="dialog" aria-modal="true">
     <div class="sidebar-header">
@@ -2460,7 +2998,7 @@ body {
     <div class="sidebar-footer"><span>Workshop DIY</span><span class="badge"><strong>v1.2</strong></span></div>
   </aside>
 
-  <!-- ACTIVITY LOG -->
+  <!-- LOG -->
   <aside class="sidebar" id="logPanel" aria-label="Activity Log">
     <div class="resize-handle" id="logResizeHandle"></div>
     <div class="sidebar-header">
@@ -3945,22 +4483,40 @@ document.readyState === 'loading'
 
 
 /* ══════════════════════════════════════════════════
-   CHROME SECRETS — app logic
+   BROWSER SECRETS — app logic
    ══════════════════════════════════════════════════ */
 
 const CAT_NAMES = {
   all:'🔭 Tous les Secrets', fun:'🎮 Fun & Jeux',
-  chrome:'🌐 À Propos de Chrome', lab:'⚗️ Laboratoire Secret',
-  network:'📡 Réseau & Internet', perf:'🚀 Performance',
-  security:'🛡️ Sécurité', data:'💾 Données & Stockage',
-  sync:'🔄 Synchronisation', tools:'🔧 Outils Avancés'
+  info:'🌐 À Propos', edge_only:'🔵 Exclusifs Edge',
+  lab:'⚗️ Laboratoire', network:'📡 Réseau',
+  perf:'🚀 Performance', security:'🛡️ Sécurité',
+  data:'💾 Données', sync:'🔄 Sync', tools:'🔧 Outils'
 };
 
-let currentCat = 'all';
-let currentQ   = '';
-let exploredUrls = new Set(JSON.parse(localStorage.getItem('cs-explored-urls') || '[]'));
+let currentBrowser = 'chrome';
+let currentCat     = 'all';
+let currentQ       = '';
+let exploredUrls   = new Set(JSON.parse(localStorage.getItem('bs-explored-urls') || '[]'));
 
-/* ── sidebar nav ── */
+/* ── Switch browser tab ── */
+function switchBrowser(btn) {
+  document.querySelectorAll('.browser-tab').forEach(b => b.classList.remove('bt-active'));
+  btn.classList.add('bt-active');
+  currentBrowser = btn.dataset.browser;
+  currentCat = 'all';
+  currentQ   = '';
+  document.getElementById('csSearch').value = '';
+  document.querySelectorAll('.cs-nav-btn').forEach(b => b.classList.remove('cs-active'));
+  document.querySelector('.cs-nav-btn[data-cat="all"]').classList.add('cs-active');
+  document.getElementById('statusText').textContent = currentBrowser === 'chrome' ? '🟢 Chrome' : '🔵 Edge';
+  document.getElementById('statsBrowserTitle').textContent = currentBrowser === 'chrome' ? '🟢 Chrome Secrets' : '🔵 Edge Secrets';
+  applyFilters();
+  updateNavCounts();
+  document.getElementById('csScroll').scrollTo({top:0});
+}
+
+/* ── Category nav ── */
 function selectCat(btn) {
   document.querySelectorAll('.cs-nav-btn').forEach(b => b.classList.remove('cs-active'));
   btn.classList.add('cs-active');
@@ -3968,43 +4524,56 @@ function selectCat(btn) {
   document.getElementById('csSearch').value = '';
   currentQ = '';
   applyFilters();
-  document.getElementById('csScroll').scrollTo({top: 0});
+  document.getElementById('csScroll').scrollTo({top:0});
 }
 
-/* ── search ── */
+/* ── Search ── */
 function doSearch(q) {
   currentQ = q.toLowerCase().trim();
   applyFilters();
 }
 
-/* ── filter engine ── */
+/* ── Filter engine ── */
 function applyFilters() {
   let visible = 0;
   document.querySelectorAll('.sc-card').forEach(card => {
-    const catOk = currentCat === 'all' || card.dataset.cat === currentCat;
-    const qOk   = !currentQ || card.textContent.toLowerCase().includes(currentQ);
-    const show  = catOk && qOk;
+    const rightBrowser = card.dataset.browser === currentBrowser;
+    const catOk  = currentCat === 'all' || card.dataset.cat === currentCat;
+    const qOk    = !currentQ || card.textContent.toLowerCase().includes(currentQ);
+    // hide edge_only in chrome view
+    const edgeOnly = card.dataset.cat === 'edge_only';
+    const show = rightBrowser && catOk && qOk && !(edgeOnly && currentBrowser === 'chrome');
     card.classList.toggle('sc-hidden', !show);
     if (show) visible++;
   });
 
-  // update title & count
-  const name = CAT_NAMES[currentCat] || currentCat;
-  document.getElementById('csTitle').textContent = currentQ ? '🔍 Résultats' : name;
-  document.getElementById('csCount').textContent =
-    visible + ' secret' + (visible > 1 ? 's' : '');
-
-  // stats card: only on "all" with no search
-  document.getElementById('statsCard').style.display =
-    (currentCat === 'all' && !currentQ) ? '' : 'none';
+  const name = currentQ ? '🔍 Résultats' : (CAT_NAMES[currentCat] || currentCat);
+  document.getElementById('csTitle').textContent = name;
+  document.getElementById('csCount').textContent = visible + ' secret' + (visible > 1 ? 's' : '');
+  document.getElementById('totalCount').textContent = visible;
+  document.getElementById('statsCard').style.display = (currentCat === 'all' && !currentQ) ? '' : 'none';
 }
 
-/* ── open secret: copy + open ── */
-function copySecret(btn, url) {
-  // 1. Try to open — must be SYNCHRONOUS (direct user gesture), before any async
-  try { window.open(url, '_blank'); } catch(e) {}
+/* ── Update nav counts ── */
+function updateNavCounts() {
+  document.querySelectorAll('.cs-nav-btn').forEach(btn => {
+    const cat = btn.dataset.cat;
+    const cnt = cat === 'all'
+      ? [...document.querySelectorAll('.sc-card')].filter(c => c.dataset.browser === currentBrowser && !(c.dataset.cat === 'edge_only' && currentBrowser === 'chrome')).length
+      : [...document.querySelectorAll(`.sc-card[data-cat="${cat}"]`)].filter(c => c.dataset.browser === currentBrowser).length;
+    const el = document.getElementById('nc_' + cat);
+    if (el) el.textContent = cnt || '–';
+    // hide edge_only nav button when on Chrome
+    if (cat === 'edge_only') {
+      btn.style.display = currentBrowser === 'edge' ? '' : 'none';
+    }
+  });
+}
 
-  // 2. Also create a hidden link and click it (second attempt for some browsers)
+/* ── Copy secret ── */
+function copySecret(btn, url) {
+  // Try to open
+  try { window.open(url, '_blank'); } catch(e) {}
   try {
     const a = document.createElement('a');
     a.href = url; a.target = '_blank'; a.rel = 'noopener';
@@ -4013,7 +4582,7 @@ function copySecret(btn, url) {
     document.body.removeChild(a);
   } catch(e) {}
 
-  // 3. Copy to clipboard (sync fallback first, then async)
+  // Copy
   let copied = false;
   try {
     const ta = document.createElement('textarea');
@@ -4022,50 +4591,44 @@ function copySecret(btn, url) {
     copied = document.execCommand('copy');
     document.body.removeChild(ta);
   } catch(e) {}
-  // async clipboard API as well
-  if (navigator.clipboard) navigator.clipboard.writeText(url).then(() => {}).catch(() => {});
+  if (navigator.clipboard) navigator.clipboard.writeText(url).catch(()=>{});
 
-  // 4. Visual feedback
+  // Feedback
   btn.textContent = '✅';
   setTimeout(() => btn.textContent = '📋', 2000);
 
-  // 5. Mark explored
+  // Explored
   exploredUrls.add(url);
-  localStorage.setItem('cs-explored-urls', JSON.stringify([...exploredUrls]));
+  localStorage.setItem('bs-explored-urls', JSON.stringify([...exploredUrls]));
   btn.closest('.sc-card').classList.add('sc-explored');
   document.getElementById('exploredCount').textContent = exploredUrls.size;
 
-  // 6. Log
-  if (typeof log === 'function')
-    log('🔭 ' + url + ' → ouvert + copié !', 'success');
+  if (typeof log === 'function') log('📋 ' + url + ' → copié !', 'success');
 
-  // 7. Toast
   const t = document.getElementById('toastIndicator');
   const m = document.getElementById('toastMessage');
   if (t && m) {
-    m.textContent = '📋 Copié ! Si l\'onglet ne s\'est pas ouvert → Ctrl+L, Ctrl+V';
+    m.textContent = '📋 Copié ! Colle dans le navigateur : Ctrl+L, Ctrl+V';
     t.style.display = 'flex';
-    setTimeout(() => t.style.display = 'none', 3500);
+    setTimeout(() => t.style.display = 'none', 3000);
   }
 }
 
-/* ── init ── */
+/* ── Init ── */
 document.addEventListener('DOMContentLoaded', () => {
-  // restore explored
   exploredUrls.forEach(url => {
     document.querySelectorAll('.sc-url-txt').forEach(el => {
-      if (el.textContent === url)
-        el.closest('.sc-card').classList.add('sc-explored');
+      if (el.textContent === url) el.closest('.sc-card').classList.add('sc-explored');
     });
   });
   document.getElementById('exploredCount').textContent = exploredUrls.size;
-
-  // welcome log
+  applyFilters();
+  updateNavCounts();
   setTimeout(() => {
     if (typeof log === 'function') {
-      log('🔭 Bienvenue dans Chrome Secrets ! 44 secrets à explorer', 'success');
-      log('← Menu gauche pour filtrer par catégorie', 'info');
-      log('📋 Clic URL = copier + ouvrir dans Chrome', 'info');
+      log('🔭 Browser Secrets — Chrome 🟢 + Edge 🔵 !', 'success');
+      log('← Sélectionne ton navigateur en haut', 'info');
+      log('📋 Clic → copier l\'URL → Ctrl+L, Ctrl+V dans le navigateur', 'info');
     }
   }, 1200);
 });
